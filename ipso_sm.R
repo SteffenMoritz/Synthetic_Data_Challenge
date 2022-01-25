@@ -26,7 +26,7 @@ sat <- satgpa
 #
 
 # Create Matrix of conf/non-conf
-non_conf <- as.matrix(sat[,1:5])
+non_conf <- as.matrix(sat[,1:4])
 conf <- as.matrix(sat[,5:6])
 
 # y Matrix of confidential variables
