@@ -76,6 +76,9 @@ ACS_synth_samp100000 <- synth_dat0$syn
 
 save(list=c("synth_dat0","ACS_synth_samp100000","ACS_samp100000"),file="acs_fcs_samp100000.RData")
 
+compare(ACS_synth_samp100000,ACS_samp100000, stat="counts")
+
+
 
 #1
 synth_dat1 <- syn(ACS[,c("HHWT", "PERWT")])
