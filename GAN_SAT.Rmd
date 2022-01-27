@@ -41,7 +41,7 @@ discrete_columns = [
 ]
 
 # Define Algorithm
-ctgan = CTGANSynthesizer(epochs=10)
+ctgan = CTGANSynthesizer(epochs=1000)
 
 # Fit - r.sat is the syntax to use variables from r scope 
 ctgan.fit(r.sat, discrete_columns)
@@ -57,6 +57,6 @@ ctgan.save('gan_model.pkl')
 ```{r}
 # Save result file p$res is the syntax used to access variables in py from r
 result_gan <- py$res
-save(result_gan, file = "rress.rda")
+save(result_gan, file = "results/sm_gan_ctgan_epoch1000.rda")
 ```
 

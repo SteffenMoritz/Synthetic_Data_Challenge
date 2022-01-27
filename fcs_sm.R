@@ -10,6 +10,8 @@ x <- syn(data = sat,  method = "cart")
 
 result <- x$syn
 
+sm_fcs_cart <- result
+save(result, file = "results/sm_sm_fcs_cart.rda")
 
 
 ###### Data for exaluation
