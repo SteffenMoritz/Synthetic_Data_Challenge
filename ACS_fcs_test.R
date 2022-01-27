@@ -2,6 +2,10 @@
 
 load("acs.rdata")
 
+
+ACS$X <- NULL
+  
+  
 # Korrelationen berechnen
 ACS_cor<-cor(ACS[,-c(1,2)],method="spearman")
 
@@ -56,6 +60,25 @@ dev.off()
 
 
 library(synthpop)
+
+
+#0
+
+randnum <- sample(x=(1:dim(ACS)[1]),size=100000)
+Puma_num <- as.numeric(unlist(lapply(ACS$PUMA,function(x)gsub("-","",x))))
+ACS2 <- ACS
+ACS2$PUMA <- Puma_num
+ACS_samp100000 <- ACS2[randnum,]
+synth_dat0 <- syn(ACS_samp100000)
+ACS_synth_samp100000 <- synth_dat0$syn
+
+
+
+save(list=c("synth_dat0","ACS_synth_samp100000","ACS_samp100000"),file="acs_fcs_samp100000.RData")
+
+compare(ACS_synth_samp100000,ACS_samp100000, stat="counts")
+
+
 
 #1
 synth_dat1 <- syn(ACS[,c("HHWT", "PERWT")])
