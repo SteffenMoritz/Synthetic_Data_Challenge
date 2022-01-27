@@ -1,4 +1,9 @@
 # Synthetic_Data_Challenge
-blubb
-Mein erster Commit
-test
+
+
+
+## To-Do Liste
+
+ - Diskutieren, welche Vars bei SAT überhaupt geschützt werden müssen
+ - Gibt es dazu Infos ... ?
+ - welche Strukturen / Zusammenhänge sollten in SAT unbedingt erhalten werden
