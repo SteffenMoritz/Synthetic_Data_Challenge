@@ -41,7 +41,7 @@ discrete_columns = [
 ]
 
 # Define Algorithm
-ctgan = CTGANSynthesizer(epochs=1000)
+ctgan = CTGANSynthesizer(epochs=10)
 
 # Fit - r.sat is the syntax to use variables from r scope 
 ctgan.fit(r.sat, discrete_columns)
