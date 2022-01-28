@@ -8,17 +8,19 @@ theme: united
 
 <H1> Simulated Data - Simple Approach.</H1>
 
-```{r, echo = TRUE, output = TRUE}
-
-load(paste0(getwd(), "/results/results_sat.RData"))
+```{r, echo = FALSE, output = TRUE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_syn_sat_mnorm_simple$ks > 0.05)
 results_syn_sat_mnorm_simple$comp
-results_syn_sat_mnorm_simple$il
 corrplot(results_syn_sat_mnorm_simple$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_syn_sat_mnorm_simple$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_syn_sat_mnorm_simple$cio$mrd_coef
+results_syn_sat_mnorm_simple$cio$mrd_se
+mean(results_syn_sat_mnorm_simple$ks > 0.05)
+results_syn_sat_mnorm_simple$il
 results_syn_sat_mnorm_simple$ug
 results_syn_sat_mnorm_simple$ut
 
@@ -28,16 +30,20 @@ results_syn_sat_mnorm_simple$ut
 <H1> Simulated Data - Complex Approach.</H1>
 
 ```{r, echo = TRUE, output = TRUE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
+
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_syn_sat_mnorm_complex$ks > 0.05)
 results_syn_sat_mnorm_complex$comp
-results_syn_sat_mnorm_complex$il
 corrplot(results_syn_sat_mnorm_complex$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_syn_sat_mnorm_complex$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_syn_sat_mnorm_complex$cio$mrd_coef
+results_syn_sat_mnorm_complex$cio$mrd_se
+mean(results_syn_sat_mnorm_complex$ks > 0.05)
+results_syn_sat_mnorm_complex$il
 results_syn_sat_mnorm_complex$ug
 results_syn_sat_mnorm_complex$ut
 
@@ -49,16 +55,19 @@ results_syn_sat_mnorm_complex$ut
 <H1> IPSO </H1>
 
 ```{r, echo = TRUE, output = TRUE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_ipso_regsdc_conf_hs_fy$ks > 0.05)
 results_sm_ipso_regsdc_conf_hs_fy$comp
 results_sm_ipso_regsdc_conf_hs_fy$il
 corrplot(results_sm_ipso_regsdc_conf_hs_fy$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_ipso_regsdc_conf_hs_fy$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_sm_ipso_regsdc_conf_hs_fy$cio$mrd_coef
+results_sm_ipso_regsdc_conf_hs_fy$cio$mrd_se
+mean(results_sm_ipso_regsdc_conf_hs_fy$ks > 0.05)
 results_sm_ipso_regsdc_conf_hs_fy$ug
 results_sm_ipso_regsdc_conf_hs_fy$ut
 
@@ -69,16 +78,19 @@ results_sm_ipso_regsdc_conf_hs_fy$ut
 <H1> FCS CART </H1>
 
 ```{r, echo = TRUE, output = TRUE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_sat_fcs_cart$ks > 0.05)
 results_sm_sat_fcs_cart$comp
 results_sm_sat_fcs_cart$il
 corrplot(results_sm_sat_fcs_cart$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_fcs_cart$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_sm_sat_fcs_cart$cio$mrd_coef
+results_sm_sat_fcs_cart$cio$mrd_se
+mean(results_sm_sat_fcs_cart$ks > 0.05)
 results_sm_sat_fcs_cart$ug
 results_sm_sat_fcs_cart$ut
 
@@ -91,16 +103,19 @@ results_sm_sat_fcs_cart$ut
 <H1> GAN CTGAN </H1>
 
 ```{r, echo = TRUE, output = TRUE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_sat_gan_ctgan$ks > 0.05)
 results_sm_sat_gan_ctgan$comp
 results_sm_sat_gan_ctgan$il
 corrplot(results_sm_sat_gan_ctgan$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_gan_ctgan$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_sm_sat_gan_ctgan$cio$mrd_coef
+results_sm_sat_gan_ctgan$cio$mrd_se
+mean(results_sm_sat_gan_ctgan$ks > 0.05)
 results_sm_sat_gan_ctgan$ug
 results_sm_sat_gan_ctgan$ut
 
@@ -114,13 +129,17 @@ results_sm_sat_gan_ctgan$ut
 
 ```{r, echo = TRUE, output = TRUE}
 library(corrplot)
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
+
 par(mfrow = c(1,2))
-load(paste0(getwd(), "/results/results_sat.RData"))
-mean(results_sm_sat_gan_ctgan_epoch1000$ks > 0.05)
+load(paste0(getwd(), "/results/results_sat2.RData"))
 results_sm_sat_gan_ctgan_epoch1000$comp
 results_sm_sat_gan_ctgan_epoch1000$il
 corrplot(results_sm_sat_gan_ctgan_epoch1000$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_gan_ctgan_epoch1000$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+results_sm_sat_gan_ctgan_epoch1000$cio$mrd_coef
+results_sm_sat_gan_ctgan_epoch1000$cio$mrd_se
+mean(results_sm_sat_gan_ctgan_epoch1000$ks > 0.05)
 results_sm_sat_gan_ctgan_epoch1000$ug
 results_sm_sat_gan_ctgan_epoch1000$ut
 
