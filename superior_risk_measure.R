@@ -2,9 +2,9 @@ library(synthpop)
 library(dplyr)
 
 load("satgpa.rda")
-load("results/sm_ipso_regsdc_hs_fy_no_corrections.rda")
+load("results/sm_sat_gan_ctgan.rda")
 df_orig <- satgpa
-df_synth <- sm_ipso_regsdc_conf_hs_fy
+df_synth <- result_gan
 
 generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
   syn_synth <- list(m = 1, syn = df_synth)
@@ -28,8 +28,8 @@ generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p 
            fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
     filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
     count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+  result = list(replications_uniques = sum(repl_synth),
+                count_disclosure = count_disclosure[1,1], per_disclosure = 100*count_disclosure[1,1]/nrow(df_synth))
 }
 
 result <- generate_uniques_pp_for_sat(df_orig, df_synth)

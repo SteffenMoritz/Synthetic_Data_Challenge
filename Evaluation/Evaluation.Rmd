@@ -82,18 +82,15 @@ generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p 
            fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
     filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
     count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+  result = list(replications_uniques = sum(repl_synth),
+                count_disclosure = count_disclosure[1,1], per_disclosure = 100*count_disclosure[1,1]/nrow(df_synth))
 }
 
 # Disclosure Risk
 disclosure <- generate_uniques_for_sat(original, synthetic)
 
-# Perceived disclosure risk
-disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
 
-pp3 <- data.frame(`Metric` = c("Actual Risk"), 
-                 `Number Uniques` = c( disclosure$no.uniques), 
+pp3 <- data.frame(`Number Uniques` = c( disclosure$no.uniques), 
                  `Number Replications` = c(disclosure$no.replications ),  
                  `Percentage Replications` = c(disclosure$per.replications)
                  )
@@ -102,6 +99,15 @@ pp3 <- data.frame(`Metric` = c("Actual Risk"),
 kbl(pp3) %>%
   kable_paper(full_width = F) 
 ```
+
+replications_uniques
+Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
+
+count_disclosure
+Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
+ 
+per_disclosure
+The proportion of synthetic data that are too close to original data relative to the original dataset size.
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
@@ -129,8 +135,8 @@ generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p 
            fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
     filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
     count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+  result = list(replications_uniques = sum(repl_synth),
+                count_disclosure = count_disclosure[1,1], per_disclosure = 100*count_disclosure[1,1]/nrow(df_synth))
 }
 
 
@@ -143,7 +149,7 @@ disclosure_own <- generate_uniques_pp_for_sat(original, synthetic)
 
 
 # Data Frame Own Metric
-pp <- data.frame(`Replications Orig.` = disclosure_own$replications_orig, `Replications Synth.` = disclosure_own$replications_synth, `Count Disclosure` = disclosure_own$count_disclosure, `Percentage Disclosure` = disclosure_own$per_replications)
+pp <- data.frame(`Replications Unique` = disclosure_own$replications_uniques, `Count Disclosure` = disclosure_own$count_disclosure, `Percentage Disclosure` = disclosure_own$per_disclosure)
 
 
 
@@ -167,23 +173,23 @@ Unique records in the synthetical dataset may be mistaken for unique records in 
 
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
 # Disclosure Risk
-disclosure <- generate_uniques_for_sat(original, synthetic)
+#disclosure <- generate_uniques_for_sat(original, synthetic)
 
 # Perceived disclosure risk
 disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
 
 
-pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
+pp2 <- data.frame( 
                  `Number Uniques` = c(disclosure_percei$no.uniques), 
                  `Number Replications` = c(disclosure_percei$no.replications),  
                  `Percentage Replications` = c(disclosure_percei$per.replications)
                  )
 
-pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
-                 `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
-                 `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
-                 `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
-                 )
+#pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
+#                 `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
+#                 `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
+#                `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
+#                 )
 
 
 kbl(pp2) %>%
