@@ -195,7 +195,6 @@ kbl(pp2) %>%
 ```
 
 
-
 # Utility Evaluation
 
 Different utility measuers are applied in this section. These utilita measures are the basis of the utility evaluation of the generated synthetic dataset.
@@ -286,7 +285,7 @@ kbl(result$comp$tab.utility) %>%
 
 ### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
 
-The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated for each variable and overall.
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 
