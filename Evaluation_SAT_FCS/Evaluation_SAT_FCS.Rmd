@@ -44,11 +44,11 @@ How you evaluated your data (specify any specific measures and their results).
 Created both a fully synthetic and a partially synthetic file
 Evidence of tuning
 
-# Dataset and Use Case considerations
+# Dataset Considerations
 Challenges we faced with the SAT datset were ... it was important for us to keep ... sum ..
 For privacy we argued that ...
 
-# Method considerations
+# Method Considerations
 Overall full ... seems to be a good choice for ... 
 
 # Privacy and Risk Evaluation
@@ -198,9 +198,60 @@ kbl(pp2) %>%
 
 # Utility Evaluation
 
-###  Distributional comparison of synthesised data
+Different utility measuers are applied in this section. These utilita measures are the basis of the utility evaluation of the generated synthetic dataset.
 
-Das ist sehr gut (R-Package: synthpop) by (S_)pmSE
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+result$comp$plots
+```
+
+
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(result$cp1$corr, method = "color", type = "lower")
+corrplot(result$cp2$corr, method = "color", type = "lower")
+```
+
+
+
+### Kolmogorov-Smirnov Test
+
+A long known test to compare (marginal) distributions is the so called Kolmogorov-Smirnov test. A significant result indicates that the two distributions are not identical. The following statistic show the share of variables in the synthetic dataset that have a p-value > 5%. (1: 100%, 0: 0%)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+print(paste0("Share of not significant KS-tests: ", mean(result$ks > 0.05)))
+```
+
+
+### (Very) Basic measures
+
+To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The first measure is the mean of the relative deviations of linear regression coefficients of the synthetic data compared to the original data. A mean of zero indicates a high utility. The same metric is applied to the respective standard errors.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# Very basic measures for testing analysis
+
+print(paste0("Mean relative deviation of coefficients: ", result$cio$mrd_coef))
+print(paste0("Mean relative deviation of standard errors: ", result$cio$mrd_se))
+
+```
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero and the S_pMSE (standardised) should equal one for perfect utility according to this metric.
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 ug <- data.frame(pMSE = result$ug$pMSE, S_pMSE = result$ug$S_pMSE)
@@ -208,53 +259,14 @@ kbl(ug) %>%
   kable_paper(full_width = F) 
 ```
 
-### Graphical comparison for Margins
-hier vlt weiterert text
-
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-result$comp$plots
-```
-
-### Hier geht es mit comp weiter ... 
-
-sddsfdd
-
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-kbl(result$comp$tab.utility) %>%
-  kable_paper(full_width = F) 
-```
-
-### Correlation plots for graphical comparison of Pearson Correlation
-
-hier evntuell weiter text
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library("corrplot")
-par(mfrow=c(1,2))
-corrplot(result$cp1$corr, method = "color", type = "lower", main = "Original")
-corrplot(result$cp2$corr, method = "color", type = "lower", main = "Synthetic")
-```
 
 
-### TEST auf ...
-share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
 
-print(paste0("Die wichtige Metrik: ", mean(result$ks > 0.05)))
-```
+Two-way tables are evaluated based on the original and the synthetic dataset. Here, tables/cells are also evaluated based on pMSE and S_pMSE (see above).
 
 
 
-### Information loss
-inforamtion loss
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-
-result$il
-
-```
-
-
-### ut
-text
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 
 
@@ -263,16 +275,23 @@ text
 result$ut
 ```
 
-### Basic measures
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-# Very basic measures for testing analysis
+kbl(result$comp$tab.utility) %>%
+  kable_paper(full_width = F) 
+```
 
-# mean relative deviation of coefficients
-result$cio$mrd_coef
 
-# mean relative  deviation of coefficients
-result$cio$mrd_se
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated for each variable and overall.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+result$il
+
 ```
 
 
