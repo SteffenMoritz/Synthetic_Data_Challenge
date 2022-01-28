@@ -54,7 +54,19 @@ Overall full ... seems to be a good choice for ...
 Starting point for our considerations was the matching on unique records method as described in the chapter on disclosure risk measures in the starter guide. The R package synthpop provided us with an easy to use implementation of this method: replicated.uniques. While using it we noticed that the meaningfulness of this measure is quite limited, if numeric variables are contained in the data. For example, one of the issues is the fact that you cannot match features, if they consist of a different number of decimals.
 Additionally, in our opinion not only exact matches of unique data are troublesome, but also “almost exact” matches. Imagine a dataset with information about the respondents’ income. If for a unique person in the original dataset there exists a matching data point in the synthetic dataset that only differs in the income by 2%, the original function would not identify this as a match. So we borrowed the notion of the p% rule from cell suppression methods which identifies a data point as critical, if one can guess the original values with some error of at most p%.
 
-With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches. We used this measure on all the synthetic data sets of the challenge. 
+With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches and provides us with the following values:
+
+**replications_uniques**
+|   Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
+
+**count_disclosure**
+|   Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
+ 
+**per_disclosure**
+|   The proportion of synthetic data that are too close to original data relative to the original dataset size.
+
+We used this measure on all the synthetic data sets of the challenge. 
+
 
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
@@ -100,14 +112,7 @@ kbl(pp3) %>%
   kable_paper(full_width = F) 
 ```
 
-replications_uniques
-Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
 
-count_disclosure
-Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
- 
-per_disclosure
-The proportion of synthetic data that are too close to original data relative to the original dataset size.
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
