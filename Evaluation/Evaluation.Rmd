@@ -57,33 +57,51 @@ Additionally, in our opinion not only exact matches of unique data are troubleso
 With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches. We used this measure on all the synthetic data sets of the challenge. 
 
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
+library(synthpop)
+library(dplyr)
+
+generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
+  syn_synth <- list(m = 1, syn = df_synth)
+  replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
+}
+
+generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p = 0.05){
+  syn_synth <- list(m = 1, syn = df_synth[,identifiers])
+  syn_orig <- list(m = 1, syn = df_orig[,identifiers])
+  
+  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])$replications
+  repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
+  
+
+  df <- inner_join(df_synth[repl_synth,], df_orig[repl_orig,], 
+                   by=names(df_orig)[identifiers], 
+                   suffix = c("_synth", "_orig"))
+  
+  count_disclosure <- df %>%
+    mutate(hs_gpa_diff = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig), 
+           fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
+    filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
+    count(.)
+  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
+                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+}
+
 # Disclosure Risk
 disclosure <- generate_uniques_for_sat(original, synthetic)
 
 # Perceived disclosure risk
 disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
 
-
-pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
-                 `Number Uniques` = c(disclosure_percei$no.uniques), 
-                 `Number Replications` = c(disclosure_percei$no.replications),  
-                 `Percentage Replications` = c(disclosure_percei$per.replications)
-                 )
-
-pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
-                 `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
-                 `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
-                 `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
+pp3 <- data.frame(`Metric` = c("Actual Risk"), 
+                 `Number Uniques` = c( disclosure$no.uniques), 
+                 `Number Replications` = c(disclosure$no.replications ),  
+                 `Percentage Replications` = c(disclosure$per.replications)
                  )
 
 
-kbl(pp2) %>%
+kbl(pp3) %>%
   kable_paper(full_width = F) 
 ```
-
-## Perceived Disclosure Risk: 
-Unique records in the synthetical dataset may be mistaken for unique records in the original data. This may lead to disadvantages for the underlying respondent, even if the record of the synthetical record differs significantly to the original record  in the confidential variable. The perceived risk is measured by matching the unique records among the datasets based on the identifying variables, e.g. sex, age, adress. We applied the method replicated.uniques of the synthpop-R-package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matchings is preferred to minimize the perceived disclosure risk. 
-
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
@@ -139,7 +157,12 @@ kbl(pp) %>%
 
 ```
 
-Lorem ipsum hjdgs adsa this is good this is bad that is why sfd Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t
+
+## Perceived Disclosure Risk: 
+Unique records in the synthetical dataset may be mistaken for unique records in the original data. This may lead to disadvantages for the underlying respondent, even if the record of the synthetical record differs significantly to the original record  in the confidential variable. The perceived risk is measured by matching the unique records among the datasets based on the identifying variables, e.g. sex, age, adress. We applied the method replicated.uniques of the synthpop-R-package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matchings is preferred to minimize the perceived disclosure risk. 
+
+
+
 
 
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
