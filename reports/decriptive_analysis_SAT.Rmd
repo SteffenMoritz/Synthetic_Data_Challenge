@@ -14,9 +14,7 @@ load(here::here("reports/satgpa.rda"))
 sat <- satgpa
 ```
 
-```{r packages, include=FALSE}
 
-```
 
 
 ## R Markdown
