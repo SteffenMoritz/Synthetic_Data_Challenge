@@ -1,6 +1,7 @@
 load("satgpa.rda")
-
+library(ggplot2)
 sat <- satgpa
+
 
 require("RegSDC")
 require(dplyr)
@@ -40,3 +41,20 @@ summary(model_orig)
 
 cov(y) - cov(y_synth)
 cov(residuals(lm(y ~ x))) - cov(residuals(lm(y_synth ~ x)))
+
+#Missing: Is data normally distributed?
+#Plot empirical densities of variables
+p <- list()
+for(i in 2:6){
+  p[[i-1]]<-ggplot(sat,aes_string(x= names(sat)[i], color = "factor(sex)"))+
+    geom_density()
+}
+ggpubr::ggarrange(plotlist = p)
+
+
+#Other data analysis
+summary(sat)
+
+sat%>%
+  group_by(sex)%>%
+  summarize_all(list(min=min,max=max))
