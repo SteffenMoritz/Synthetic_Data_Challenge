@@ -29,7 +29,7 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(result_gan)
 ```
 # Executive Summary
-According to our results FCS is only partially usefule for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.
+According to our results FCS is only partially useful for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.
 
 
 The method you used
@@ -49,7 +49,41 @@ Overall full ... seems to be a good choice for ...
 
 # Privacy and Risk Evaluation
 
-Lorem ipsum hjdgs adsa this is good this is bad that is why sfd Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t
+## Measuring Disclosure Risk - An Improvement of Uniqueness-Measure:
+
+Starting point for our considerations was the matching on unique records method as described in the chapter on disclosure risk measures in the starter guide. The R package synthpop provided us with an easy to use implementation of this method: replicated.uniques. While using it we noticed that the meaningfulness of this measure is quite limited, if numeric variables are contained in the data. For example, one of the issues is the fact that you cannot match features, if they consist of a different number of decimals.
+Additionally, in our opinion not only exact matches of unique data are troublesome, but also “almost exact” matches. Imagine a dataset with information about the respondents’ income. If for a unique person in the original dataset there exists a matching data point in the synthetic dataset that only differs in the income by 2%, the original function would not identify this as a match. So we borrowed the notion of the p% rule from cell suppression methods which identifies a data point as critical, if one can guess the original values with some error of at most p%.
+
+With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches. We used this measure on all the synthetic data sets of the challenge. 
+
+```{r, echo=FALSE, warning = FALSE, message= FALSE}
+# Disclosure Risk
+disclosure <- generate_uniques_for_sat(original, synthetic)
+
+# Perceived disclosure risk
+disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
+
+
+pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
+                 `Number Uniques` = c(disclosure_percei$no.uniques), 
+                 `Number Replications` = c(disclosure_percei$no.replications),  
+                 `Percentage Replications` = c(disclosure_percei$per.replications)
+                 )
+
+pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
+                 `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
+                 `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
+                 `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
+                 )
+
+
+kbl(pp2) %>%
+  kable_paper(full_width = F) 
+```
+
+## Perceived Disclosure Risk: 
+Unique records in the synthetical dataset may be mistaken for unique records in the original data. This may lead to disadvantages for the underlying respondent, even if the record of the synthetical record differs significantly to the original record  in the confidential variable. The perceived risk is measured by matching the unique records among the datasets based on the identifying variables, e.g. sex, age, adress. We applied the method replicated.uniques of the synthpop-R-package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matchings is preferred to minimize the perceived disclosure risk. 
+
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
@@ -103,8 +137,6 @@ library("kableExtra")
 kbl(pp) %>%
   kable_paper(full_width = F) 
 
-
-
 ```
 
 Lorem ipsum hjdgs adsa this is good this is bad that is why sfd Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t Lorem ipsum hjdgs adsa t
@@ -118,11 +150,18 @@ disclosure <- generate_uniques_for_sat(original, synthetic)
 disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
 
 
-pp2 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
+pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
+                 `Number Uniques` = c(disclosure_percei$no.uniques), 
+                 `Number Replications` = c(disclosure_percei$no.replications),  
+                 `Percentage Replications` = c(disclosure_percei$per.replications)
+                 )
+
+pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
                  `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
                  `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
                  `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
                  )
+
 
 kbl(pp2) %>%
   kable_paper(full_width = F) 
