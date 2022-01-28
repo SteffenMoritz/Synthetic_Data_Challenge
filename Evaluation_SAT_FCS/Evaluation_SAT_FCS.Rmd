@@ -8,6 +8,7 @@ output:
     theme: architect
     highlight: github
     toc: true
+    toc_depth: 1
 # pdf_document:
 #    toc: true
 #    toc_depth: 1
