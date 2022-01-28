@@ -1,0 +1,83 @@
+---
+title: "GAN_SAT"
+author: "Steffen Moritz"
+date: "1/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r dataset, include=FALSE}
+# Load Source Dataset
+load(here::here("acs.rdata"))
+acs <- ACS
+```
+
+```{r reticulate, include=FALSE}
+# Use reticulate, set python up - so ctgan can be later used
+library("reticulate")
+#install_python()
+#py_available(initialize = TRUE)
+use_python("/usr/local/bin/python3")
+py_version()
+#virtualenv_create("synthchallenge")
+#virtualenv_install("synthchallenge", "sdnist")
+#virtualenv_install("synthchallenge", "CTGAN")
+use_virtualenv("synthchallenge")
+#py_module_available("ctgan")
+```
+
+```{python pycode}
+# import ctgan
+from ctgan import CTGANSynthesizer
+
+# define which columns shall be discrete
+discrete_columns = [
+  'PUMA',
+  'YEAR',
+  'GQ',
+  'SEX',
+  'MARST',
+  'RACE',
+  'HISPAN',
+  'CITIZEN',
+  'SPEAKENG',
+  'HCOVANY',
+  'HCOVPRIV',
+  'HINSEMP',
+  'HINSCAID',
+  'HINSCARE',
+  'EDUC',
+  'EMPSTAT',
+  'LABFORCE',
+  'WRKLSTWK',
+  'ABSENT',
+  'LOOKING',
+  'AVAILBLE',
+  'WRKRECAL',
+  'WORKEDYR'
+]
+
+# Define Algorithm
+ctgan = CTGANSynthesizer(epochs=10)
+
+# Fit - r.sat is the syntax to use variables from r scope 
+ctgan.fit(r.acs, discrete_columns)
+
+# Create samples from model
+res = ctgan.sample(1035201)
+
+#print(samples)
+# save model (could be used to create different samples later)
+ctgan.save('gan_model_acs.pkl')
+```
+
+```{r}
+# Save result file p$res is the syntax used to access variables in py from r
+result_gan_acs <- py$res
+save(result_gan_acs, file = "results/sm_acs_gan_ctgan_epoch10.rda")
+```
+

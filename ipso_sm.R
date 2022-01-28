@@ -34,10 +34,11 @@ conf <- as.matrix(sat[,5:6])
 ipso <- RegSDC::RegSDCipso( y = conf , x = non_conf)
 
 # Merge changed confidential variables and unchanged non-conf back together
-result <- sat
+result <- as.data.frame(non_conf)
 result[ ,5:6] <- as.data.frame(ipso)
 
-save(result, file = "results/sm_ipso_regsdc_hs_fy_no_corrections.rda")
+sm_ipso_regsdc_conf_hs_fy <- result
+save(sm_ipso_regsdc_conf_hs_fy, file = "results/sm_ipso_regsdc_hs_fy_no_corrections.rda")
 
 
 
