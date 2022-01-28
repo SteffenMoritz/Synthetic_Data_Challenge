@@ -6,39 +6,93 @@ toc:
 theme: united
 ---
 
-<H1> Simulated Data - Simple Approach.</H1>
+<H1> Simulated Data - Simple Approach</H1>
 
-```{r, echo = TRUE, output = TRUE}
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+# Method
+A multivariate normal distribution was fitted separately for each outcome of variable sex
+to the continuous variables with the exception of sat_sum. This variable
+was later recalculated by the sum of the variables sat_v and sat_m. 
+
+
+```{r, echo = FALSE, output = TRUE, fig.show= TRUE, warning= FALSE, message = FALSE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_syn_sat_mnorm_simple$ks > 0.05)
-results_syn_sat_mnorm_simple$comp
-results_syn_sat_mnorm_simple$il
+# Graphical comparison for Margins
+results_syn_sat_mnorm_simple$comp 
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_syn_sat_mnorm_simple$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_syn_sat_mnorm_simple$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_syn_sat_mnorm_simple$cio$mrd_coef
+
+# mean relative  deviation of coefficients
+results_syn_sat_mnorm_simple$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_syn_sat_mnorm_simple$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_syn_sat_mnorm_simple$il
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_syn_sat_mnorm_simple$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_syn_sat_mnorm_simple$ut
 
 ```
 
 
-<H1> Simulated Data - Complex Approach.</H1>
+<H1> Simulated Data - Complex Approach</H1>
 
-```{r, echo = TRUE, output = TRUE}
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+# Method
+A multivariate non-normal distribution considering skewness and curtosis was fitted separately for each outcome of variable sex to the continuous variables with the exception of sat_sum. This variable
+was later recalculated by the sum of the variables sat_v and sat_m. 
+
+
+```{r, echo = FALSE, output = TRUE, fig.show= TRUE, warning= FALSE, message = FALSE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
+
+load(paste0(getwd(), "/results/results_sat2.RData"))
+
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_syn_sat_mnorm_complex$ks > 0.05)
+# Histograms for graphical comparison for Margins
 results_syn_sat_mnorm_complex$comp
-results_syn_sat_mnorm_complex$il
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_syn_sat_mnorm_complex$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_syn_sat_mnorm_complex$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_syn_sat_mnorm_complex$cio$mrd_coef
+
+# mean relative deviation of coefficients
+results_syn_sat_mnorm_complex$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_syn_sat_mnorm_complex$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_syn_sat_mnorm_complex$il
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_syn_sat_mnorm_complex$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_syn_sat_mnorm_complex$ut
 
 ```
@@ -48,18 +102,38 @@ results_syn_sat_mnorm_complex$ut
 
 <H1> IPSO </H1>
 
-```{r, echo = TRUE, output = TRUE}
+```{r, echo = FALSE, output = TRUE, fig.show= TRUE, warning= FALSE, message = FALSE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_ipso_regsdc_conf_hs_fy$ks > 0.05)
+# Histograms for graphical comparison for Margins
 results_sm_ipso_regsdc_conf_hs_fy$comp
-results_sm_ipso_regsdc_conf_hs_fy$il
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_sm_ipso_regsdc_conf_hs_fy$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_ipso_regsdc_conf_hs_fy$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_sm_ipso_regsdc_conf_hs_fy$cio$mrd_coef
+
+# mean relative deviation of coefficients
+results_sm_ipso_regsdc_conf_hs_fy$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_sm_ipso_regsdc_conf_hs_fy$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_sm_ipso_regsdc_conf_hs_fy$il
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_ipso_regsdc_conf_hs_fy$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_ipso_regsdc_conf_hs_fy$ut
 
 ```
@@ -68,18 +142,38 @@ results_sm_ipso_regsdc_conf_hs_fy$ut
 
 <H1> FCS CART </H1>
 
-```{r, echo = TRUE, output = TRUE}
+```{r, echo = FALSE, output = TRUE, fig.show= TRUE, warning= FALSE, message = FALSE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_sat_fcs_cart$ks > 0.05)
+# Histograms for graphical comparison for Margins
 results_sm_sat_fcs_cart$comp
-results_sm_sat_fcs_cart$il
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_sm_sat_fcs_cart$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_fcs_cart$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_sm_sat_fcs_cart$cio$mrd_coef
+
+# mean relative deviation of coefficients
+results_sm_sat_fcs_cart$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_sm_sat_fcs_cart$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_sm_sat_fcs_cart$il
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_fcs_cart$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_fcs_cart$ut
 
 ```
@@ -90,18 +184,39 @@ results_sm_sat_fcs_cart$ut
 
 <H1> GAN CTGAN </H1>
 
-```{r, echo = TRUE, output = TRUE}
+```{r, echo = FALSE, output = TRUE, fig.show= TRUE, warning= FALSE, message = FALSE}
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
 
-load(paste0(getwd(), "/results/results_sat.RData"))
+load(paste0(getwd(), "/results/results_sat2.RData"))
 library(corrplot)
 par(mfrow = c(1,2))
 
-mean(results_sm_sat_gan_ctgan$ks > 0.05)
+# Histograms for graphical comparison for Margins
 results_sm_sat_gan_ctgan$comp
-results_sm_sat_gan_ctgan$il
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_sm_sat_gan_ctgan$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_gan_ctgan$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_sm_sat_gan_ctgan$cio$mrd_coef
+
+# mean relative deviation of coefficients
+results_sm_sat_gan_ctgan$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_sm_sat_gan_ctgan$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_sm_sat_gan_ctgan$il
+
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_gan_ctgan$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_gan_ctgan$ut
 
 ```
@@ -112,16 +227,38 @@ results_sm_sat_gan_ctgan$ut
 
 <H1> GAN EPOCH1000 </H1>
 
-```{r, echo = TRUE, output = TRUE}
+```{r, echo = FALSE, output = FALSE, fig.show= TRUE, warning= FALSE, message = FALSE}
 library(corrplot)
+setwd("C:/Users/Hariolf/Documents/GitHub/Synthetic_Data_Challenge")
+
 par(mfrow = c(1,2))
-load(paste0(getwd(), "/results/results_sat.RData"))
-mean(results_sm_sat_gan_ctgan_epoch1000$ks > 0.05)
+load(paste0(getwd(), "/results/results_sat2.RData"))
+
+# Histograms for graphical comparison for Margins
 results_sm_sat_gan_ctgan_epoch1000$comp
-results_sm_sat_gan_ctgan_epoch1000$il
+
+# Correlation plots for graphical comparison of Pearson Correlation
 corrplot(results_sm_sat_gan_ctgan_epoch1000$cp1$corr, method = "color", type = "lower", main = "Original")
 corrplot(results_sm_sat_gan_ctgan_epoch1000$cp2$corr, method = "color", type = "lower", main = "Synthetic")
+
+# Very basic measures for testing analysis
+
+# mean relative deviation of coefficients
+results_sm_sat_gan_ctgan_epoch1000$cio$mrd_coef
+
+# mean relative deviation of coefficients
+results_sm_sat_gan_ctgan_epoch1000$cio$mrd_se
+
+# share of variables in the synthetic dataset that do not significantly differ from the distribution in the original dataset 
+mean(results_sm_sat_gan_ctgan_epoch1000$ks > 0.05)
+
+# Information loss measure proposed by Andrzej Mlodak (R-Package: sdcMicro)
+results_sm_sat_gan_ctgan_epoch1000$il
+
+# Distributional comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_gan_ctgan_epoch1000$ug
+
+# Two-way tables comparison of synthesised data (R-Package: synthpop) by (S_)pmSE
 results_sm_sat_gan_ctgan_epoch1000$ut
 
 ```

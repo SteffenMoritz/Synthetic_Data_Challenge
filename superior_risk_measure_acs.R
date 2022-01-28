@@ -2,9 +2,9 @@ library(synthpop)
 library(dplyr)
 
 load("pums.RData")
-load("results/fg_ipso_regsdc_conf_from_INCTOT.rda")
-df_orig <- pums
-df_synth <- fg_ipso_regsdc_conf_from_INCTOT
+load("results/rt_acs_fcs_samp100000.rda")
+df_orig <- ACS_samp100000#pums
+df_synth <- ACS_synth_samp100000
 #make PUMA integer and remove non-necessary cols, weights are not considered
 df_orig$X <- NULL
 df_synth$X <- NULL
@@ -46,8 +46,8 @@ generate_uniques_pp_for_acs <-function(df_orig, df_synth,identifiers = 1:which(n
     filter(INCTOT_diff < p | INCWAGE_diff < p | INCWELFR_diff < p | INCINVST_diff < p
            | INCEARN_diff < p | POVERTY_diff < p | DEPARTS_diff < p |  ARRIVES_diff < p)%>%
     count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+  result = list(replications_uniques = sum(repl_synth),
+                count_disclosure = count_disclosure[1,1], per_disclosure = 100*count_disclosure[1,1]/nrow(df_synth))
 }
 
 result <- generate_uniques_pp_for_acs(df_orig, df_synth)
@@ -55,5 +55,5 @@ result
 
 generate_uniques_for_acs(as.data.frame(df_orig), df_synth)#, exclude = c("hs_gpa", "fy_gpa") )
 
-generate_uniques_for_sat(as.data.frame(df_orig), df_synth, exclude = )
+#generate_uniques_for_sat(as.data.frame(df_orig), df_synth, exclude = )
 

@@ -2,16 +2,45 @@ library(synthpop)
 
 # Load dataset
 # setwd must be at project folder for load/save
-load("satgpa.rda")
-sat <- satgpa
 
-x <- syn(data = sat,  method = "cart")
+#load("satgpa.rda")
+load("acs.rdata")
+
+acs <- ACS
+
+cols <- c('PUMA',
+          'YEAR',
+          'GQ',
+          'SEX',
+          'MARST',
+          'RACE',
+          'HISPAN',
+          'CITIZEN',
+          'SPEAKENG',
+          'HCOVANY',
+          'HCOVPRIV',
+          'HINSEMP',
+          'HINSCAID',
+          'HINSCARE',
+          'EDUC',
+          'EMPSTAT',
+          'LABFORCE',
+          'WRKLSTWK',
+          'ABSENT',
+          'LOOKING',
+          'AVAILBLE',
+          'WRKRECAL',
+          'WORKEDYR')
+
+acs[cols] <- lapply(acs[cols], factor)  ## as.factor() could also be used
+
+x <- syn(data = acs,  method = "cart")
 
 
 result <- x$syn
 
-sm_fcs_cart <- result
-save(result, file = "results/sm_sm_fcs_cart.rda")
+sm_acs_fcs_cart <- result
+save(sm_acs_fcs_cart, file = "results/sm_acs_fcs_cart.rda")
 
 
 ###### Data for exaluation
