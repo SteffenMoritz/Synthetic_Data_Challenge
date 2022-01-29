@@ -1,5 +1,5 @@
 ---
-title: SAT Dataset Evaluation Report - Method FCS
+title: SAT Dataset Evaluation Report - Method GAN_v1
 subtitle: Use Case School testing
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
 date: January 28, 2022
@@ -25,12 +25,12 @@ library("kableExtra")
 
 ```{r dataset, include=FALSE}
 # Load Source Dataset
-load(here::here("results/sm_sat_fcs_cart.rda"))
+load(here::here("results/sm_sat_gan_ctgan.rda"))
 load(here::here("results/results_sat2.RData"))
 load(here::here("satgpa.rda"))
-result <- results_sm_sat_fcs_cart
+result <- results_sm_sat_gan_ctgan
 original <- as.data.frame(satgpa)
-synthetic <- as.data.frame(sm_sat_fcs_cart)
+synthetic <- as.data.frame(result_gan)
 ```
 # Executive Summary
 *According to our results FCS is only partially useful for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.*
@@ -45,20 +45,20 @@ synthetic <- as.data.frame(sm_sat_fcs_cart)
 *Evidence of tuning*
 
 
-According to our utility meausres, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak's information loss criterion. Overall, we see satisfying results regarding the utility measures.
+According to our utility measures, generative adversarial networks do not produce suitable synthetic data from the SAT dataset. We should point out, that this first GAN-approach was a fast execution. Hence, the extremely low utility should not be surprising. The first impression from the graphs is underpinned by further metrics. The S_pMSE for tables and for distributions is excessively high. The Mahalanobis distance of the regression parameters always exceeded the critical value. There is no reasonable usability according to Mlodak's information loss criterion.
 
 
 
 
 Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
 
-**Releasing to public: YES** 
+**Releasing to public: NO ** 
 
-**Testing analysis: YES**
+**Testing analysis: NO **
 
-**Education: YES **
+**Education: NO **
 
-**Testing technology: YES, but too elaborated**
+**Testing technology: NO**
 
 
 
@@ -67,10 +67,6 @@ One has to decide first, which of the variables in the dataset are confidential 
 
 
 # Method Considerations
-We decided to use the FCS method for multiple reasons. For one the use of the FCS method is fairly simple and straightforward, since no prior knowledge of the relation between the data is necessary. Secondly, the R package “synthpop” already comes with a good implementation of the method. Thirdly, and maybe most importantly, the method can be used for nearly all types of datasets and yield meaningful results.
-
-For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the Classification and Regression Tree (CART) machine learning model for each variable. 
-For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested. This is obviously out of the scope of this challenge.
 
 
 # Privacy and Risk Evaluation
@@ -270,7 +266,7 @@ result$cio$mhd_05
 
 ### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
 
-Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero and the S_pMSE (standardised) should equal one for perfect utility.
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero. The S_pMSE (standardised pMSE) should not exceed 10 and for a good fit below 3 according to Raab (2021, https://unece.org/sites/default/files/2021-12/SDC2021_Day2_Raab_AD.pdf)
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 ug <- result$comp$tab.utility
