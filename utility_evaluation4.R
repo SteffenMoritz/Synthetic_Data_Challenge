@@ -165,7 +165,7 @@ results_syn_sat_mnorm_simple <- list(
   ks = ks_check(orig_sat, syn_sat_mnorm_simple),
   il = IL_variables(orig_sat, syn_sat_mnorm_simple),
   ug = utility.gen(syn_sat_mnorm_simple, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(syn_sat_mnorm_simple), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(syn_sat_mnorm_simple), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
@@ -181,7 +181,7 @@ results_syn_sat_mnorm_complex <- list(
   ks = ks_check(orig_sat, syn_sat_mnorm_complex),
   il = IL_variables(orig_sat, syn_sat_mnorm_complex),
   ug = utility.gen(syn_sat_mnorm_complex, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(syn_sat_mnorm_complex), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(syn_sat_mnorm_complex), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
@@ -199,7 +199,7 @@ results_sm_ipso_regsdc_conf_hs_fy <- list(
   ks = ks_check(orig_sat, sm_ipso_regsdc_conf_hs_fy),
   il = IL_variables(orig_sat, sm_ipso_regsdc_conf_hs_fy),
   ug = utility.gen(sm_ipso_regsdc_conf_hs_fy, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(sm_ipso_regsdc_conf_hs_fy), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(sm_ipso_regsdc_conf_hs_fy), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
@@ -217,7 +217,7 @@ results_sm_sat_gan_ctgan_epoch1000 <- list(
   ks = ks_check(orig_sat, sm_sat_gan_ctgan_epoch1000),
   il = IL_variables(orig_sat, sm_sat_gan_ctgan_epoch1000),
   ug = utility.gen(sm_sat_gan_ctgan_epoch1000, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(sm_sat_gan_ctgan_epoch1000), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(sm_sat_gan_ctgan_epoch1000), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
@@ -241,7 +241,7 @@ results_sm_sat_gan_ctgan <- list(
   ks = ks_check(orig_sat, sm_sat_gan_ctgan),
   il = IL_variables(orig_sat, sm_sat_gan_ctgan),
   ug = utility.gen(sm_sat_gan_ctgan, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(sm_sat_gan_ctgan), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(sm_sat_gan_ctgan), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
@@ -262,7 +262,7 @@ results_sm_sat_fcs_cart <- list(
   ks = ks_check(orig_sat, sm_sat_fcs_cart),
   il = IL_variables(orig_sat, sm_sat_fcs_cart),
   ug = utility.gen(sm_sat_fcs_cart, as.data.frame(orig_sat)),
-  ut = utility.tables(as.data.frame(sm_sat_fcs_cart), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 10, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+  ut = utility.tables(as.data.frame(sm_sat_fcs_cart), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
 )  
 
 
