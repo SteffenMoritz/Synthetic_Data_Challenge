@@ -1,0 +1,467 @@
+{
+  "schema": {
+    "Unnamed: 0": {
+      "dtype": "uint32",
+      "kind": "numeric",
+      "min": 0,
+      "max": 1035200,
+      "bins": 10
+    },
+    "YEAR": {
+      "dtype": "uint16",
+      "kind": "categorical",
+      "values": [
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "HHWT": {
+      "dtype": "float",
+      "kind": "numeric",
+      "min": 1.0,
+      "max": 1829.0,
+      "bins": 10
+    },
+    "GQ": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "PERWT": {
+      "dtype": "float",
+      "kind": "numeric",
+      "min": 1.0,
+      "max": 1660.0,
+      "bins": 10
+    },
+    "SEX": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "AGE": {
+      "dtype": "uint8",
+      "kind": "numeric",
+      "min": 21,
+      "max": 95,
+      "bins": 10
+    },
+    "MARST": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "RACE": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "HISPAN": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "CITIZEN": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "SPEAKENG": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "HCOVANY": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "HCOVPRIV": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "HINSEMP": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "HINSCAID": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "HINSCARE": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "EDUC": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "EMPSTAT": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "EMPSTATD": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        10,
+        12,
+        14,
+        15,
+        20,
+        30
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "LABFORCE": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2
+      ],
+      "codes": [
+        1,
+        2
+      ]
+    },
+    "WRKLSTWK": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "ABSENT": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        3,
+        4
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "LOOKING": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "AVAILBLE": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "codes": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "WRKRECAL": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "WORKEDYR": {
+      "dtype": "uint8",
+      "kind": "categorical",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "codes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "INCTOT": {
+      "dtype": "int32",
+      "kind": "numeric",
+      "min": -12600,
+      "max": 1178000,
+      "bins": 10
+    },
+    "INCWAGE": {
+      "dtype": "uint32",
+      "kind": "numeric",
+      "min": 0,
+      "max": 543000,
+      "bins": 10
+    },
+    "INCWELFR": {
+      "dtype": "uint16",
+      "kind": "numeric",
+      "min": 0,
+      "max": 30000,
+      "bins": 10
+    },
+    "INCINVST": {
+      "dtype": "int32",
+      "kind": "numeric",
+      "min": -5100,
+      "max": 245000,
+      "bins": 10
+    },
+    "INCEARN": {
+      "dtype": "int32",
+      "kind": "numeric",
+      "min": -7700,
+      "max": 916000,
+      "bins": 10
+    },
+    "POVERTY": {
+      "dtype": "uint16",
+      "kind": "numeric",
+      "min": 0,
+      "max": 501,
+      "bins": 10
+    },
+    "DEPARTS": {
+      "dtype": "uint16",
+      "kind": "numeric",
+      "min": 0,
+      "max": 2345,
+      "bins": 10
+    },
+    "ARRIVES": {
+      "dtype": "uint16",
+      "kind": "numeric",
+      "min": 0,
+      "max": 2359,
+      "bins": 10
+    },
+    "sim_individual_id": {
+      "dtype": "uint32",
+      "kind": "numeric",
+      "min": 0,
+      "max": 1281728,
+      "bins": 10
+    }
+  }
+}
