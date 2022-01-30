@@ -220,4 +220,3 @@ result$il
 
 
 # Tuning and Optimizations
-Addtionally to fitting multivariate normal distributions, we tested an approach with non-normal multivariate distributions. We were not able to fit a more flexibel multivariate distributions, supposedly caused among other characteristics by extreme skewness in some variables.
