@@ -1,0 +1,10 @@
+{
+  "dtype": {
+    "sex": "uint8",
+    "sat_v": "uint8",
+    "sat_m": "uint8",
+    "sat_sum": "uint8",
+    "hs_gpa": "float",
+    "fy_gpa": "float"
+  }
+}
