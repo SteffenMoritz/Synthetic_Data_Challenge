@@ -63,7 +63,12 @@ Based on the results of this document, we rate the suitability of this synthetic
 
 
 # Dataset Considerations
-One has to decide first, which of the variables in the dataset are confidential and which are identifying. In the satgpa dataset the feature “sex” surely is an identifying value but it is less obvious if the SAT percentiles are identifying values or confidential ones. The same holds for the grade point average. We found the grade point average to be more confidential than the SAT results. It is very likely for example that students who passed the SAT exchanged about their grades with their fellow students or that teachers know about the SAT results of their students. So these (older) information potentially can be used to identify a student within a dataset and find out about the (newer) information of grade point average. The calculus behind this decision is that the older information about a test, that is only used to get the college admission, is less confidential than the newer information about actual grades, which might give information about a students current situation.
+When deciding, if data is released to the public it is of utmost importance to define, **which variables** are the **most relevant** in terms of **privacy and utility**. This process is very **domain and country specific**, since different areas of the world have different privacy legislation and feature specific overall circumstances. This step would require input and discussions with actual domain experts. Since we are foreign to US privacy law and there is no SAT equivalent in Germany, the assumptions made for the Synthetic Data Challenge are basically a **educated guess** from our side.
+
+From a **utility perspective** it is important to know which variables and correlations are most interesting for actual users of the created synthetic dataset. Different use cases might require focus on different variables and correlations. We could not single out a most important variable, thus in our utility analysis we decided to focus on the overall SAT utility and **not to prioritize a specific variable**. From a data plausibility perspective it was essential to us, that the `sat_v + sat_m = sat_sum` stay consistent.
+
+From a **privacy perspective** it has to be decided, which variables are **confidential** and which are **identifying**. As already mentioned, specifying this depends on multiple factors e.g. **regulations** or also **other public information**, that could be used for **de-anonymization**. For our analysis, we made the following assumptions: Feature `sex` is an identifying value. For the SAT percentiles (`sat_v`, `sat_m`, `sat_sum`) there can be argued in both directions, but we decided for it to be an identifying variable. The same holds for the grade point average `fy_gpa`. We assumed the grade point average to be more confidential than the SAT results. It is very likely for example that students who passed the SAT exchanged about their grades with their fellow students or that teachers know about the SAT results of their students. So these (older) information potentially can be used to **identify a student** within a dataset and find out about the **(newer) information of grade point average**. The calculus behind this decision is that the older information about a test, that is only used to get the college admission, is **less confidential than the newer information** about actual grades, which might give information about a student's current situation.
+
 
 
 # Method Considerations
@@ -72,12 +77,24 @@ We fit two multivariate normal distributions for each gender and create syntheti
 
 # Privacy and Risk Evaluation
 
-## Measuring Disclosure Risk - An Improvement of Uniqueness-Measure:
+## Measuring Disclosure Risk - An Improvement of Uniqueness-Measure
 
 Starting point for our considerations was the matching on unique records method as described in the chapter on disclosure risk measures in the starter guide. The R package synthpop provided us with an easy to use implementation of this method: replicated.uniques. While using it we noticed that the meaningfulness of this measure is quite limited, if numeric variables are contained in the data. For example, one of the issues is the fact that you cannot match features, if they consist of a different number of decimals.
 Additionally, in our opinion not only exact matches of unique data are troublesome, but also “almost exact” matches. Imagine a dataset with information about the respondents’ income. If for a unique person in the original dataset there exists a matching data point in the synthetic dataset that only differs in the income by 2%, the original function would not identify this as a match. So we borrowed the notion of the p% rule from cell suppression methods which identifies a data point as critical, if one can guess the original values with some error of at most p%.
 
-With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches. We used this measure on all the synthetic data sets of the challenge. 
+With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches and provides us with the following values:
+
+**replications_uniques**
+|   Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
+
+**count_disclosure**
+|   Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
+
+**per_disclosure**
+|   The proportion of synthetic data that are too close to original data relative to the original dataset size.
+
+We used this measure on all the synthetic data sets of the challenge. 
+
 
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
