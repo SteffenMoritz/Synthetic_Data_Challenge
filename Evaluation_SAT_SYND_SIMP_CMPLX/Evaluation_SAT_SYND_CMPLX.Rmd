@@ -105,22 +105,29 @@ generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
 generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p = 0.05){
   syn_synth <- list(m = 1, syn = df_synth[,identifiers])
   syn_orig <- list(m = 1, syn = df_orig[,identifiers])
-  
-  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])$replications
+  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])
   repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
-  
-
-  df <- inner_join(df_synth[repl_synth,], df_orig[repl_orig,], 
-                   by=names(df_orig)[identifiers], 
+  df <- inner_join(df_synth[repl_synth$replications,], df_orig[repl_orig,],
+                   by=names(df_orig)[identifiers],
                    suffix = c("_synth", "_orig"))
-  
+  sum_repl_synth  <- sum(repl_synth$replications)
   count_disclosure <- df %>%
-    mutate(hs_gpa_diff = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig), 
-           fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
-    filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
-    count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+    mutate(hs_gpa_discl = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig)< p,
+           fy_gpa_discl = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) < p,
+           at_least_1_discl = hs_gpa_discl | fy_gpa_discl,
+           at_least_2_discl = hs_gpa_discl & fy_gpa_discl) %>%
+    summarize(sum_hs_gpa_discl = sum(hs_gpa_discl),
+              sum_fy_gpa_discl = sum(fy_gpa_discl),
+              sum_at_least_1_discl = sum(at_least_1_discl),
+              sum_at_least_2_discl = sum(at_least_2_discl)) %>%
+    mutate(#hs_gpa_discl = paste0(sum_hs_gpa_discl, " (",round(sum_hs_gpa_discl/sum_repl_synth,4)*100, "%)"),
+           #unique_orig = repl_synth$no.uniques,
+           'Replication.Uniques' = paste0(repl_synth$no.replications, " (",round(repl_synth$no.replications/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.>=1.CVar' = paste0(sum_at_least_1_discl, " (",round(sum_at_least_1_discl/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.2.CVars' = paste0(sum_at_least_2_discl, " (",round(sum_at_least_2_discl/nrow(df_orig),4)*100, "%)"),
+           )%>%
+    select('Replication.Uniques' , 'Disclosure.in.>=1.CVar', 'Disclosure.in.2.CVars')
+  count_disclosure
 }
 
 
@@ -130,11 +137,9 @@ synthetic$fy_gpa <- round(synthetic$fy_gpa,2)
 # Disclosure Risk  - own metric
 disclosure_own <- generate_uniques_pp_for_sat(original, synthetic)
 
-# Data Frame Own Metric
-pp <- data.frame(`Replication Uniques.` = disclosure_own$replications_orig,  `Disclosure Count` = disclosure_own$count_disclosure, `Disclosure Percentage` = disclosure_own$per_replications)
 
 
-kbl(pp) %>%
+kbl(disclosure_own) %>%
     kable_classic("striped", full_width = F)
 
 

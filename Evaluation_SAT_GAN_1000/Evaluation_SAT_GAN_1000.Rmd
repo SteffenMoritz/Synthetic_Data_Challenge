@@ -76,7 +76,7 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 
 # Method Considerations
 
-**GANs** are in comparison to the other methods a **relatively recent method** (Goodfellow, et al., 2014). For our experiments we used the **sdv** python libraries. We employed **ctgan** (Conditional GAN) and **CopulaGAN** for our analysis. We also tried using the R package **ganGenerativeData**, but because we were not able to use all variable types as input, the results with ganGenerativeData were not on the same level as with svd. For the  SAT dataset computing time with GAN seemed reasonable. Yet, already for SAT as we were using ctgan with **epochs** settings of over 1000, the **process already took hours**. For ACS we had to cancel several runs, after not completing after 8 hours computing time. This clearly shows, that the GAN method has it's limits when dealing with large and complex datasets. Dedicated computing infrastructure would be quite useful in these cases. Data utility wise (especially for the lower epoch settings) the resulting synthetic dataset differed significantly from the original data. In comparison to the other methods the GAN seemed to create implausible values more often. E.g. negative values for variables, that are known to be only positive. While the tendency to slightly **extrapolate** might seem negative at first, this can also be a positive e.g. when the original dataset itself is only a sample or when the method is used to create technical test data.
+**GANs** are in comparison to the other methods a **relatively recent method** (Goodfellow, et al., 2014). For our experiments we used the `sdv` python libraries. We employed `ctgan` (Conditional GAN) and `CopulaGAN` for our analysis. We also tried using the R package `ganGenerativeData`, but because we were not able to use all variable types as input, the results with ganGenerativeData were not on the same level as with svd. For the **SAT** dataset computing time with GAN seemed reasonable. Yet, already for SAT as we were using ctgan with `epochs` settings of over 1000, the **process already took hours**. For **ACS** we had to cancel several runs, after not completing after 8 hours computing time. This clearly shows, that the GAN method has it's **limits** when dealing with **large and complex datasets**. Dedicated computing infrastructure would be quite useful in these cases. Data utility wise (especially for the lower epoch settings) the resulting synthetic dataset differed significantly from the original data. In comparison to the other methods the GAN seemed to create **implausible values** more often. E.g. negative values for variables, that are known to be only positive. While the tendency to slightly **extrapolate** might seem negative at first, this can also be a positive e.g. when the original dataset itself is only a sample or when the method is used to create technical test data.
 
 # Privacy and Risk Evaluation
 ### Disclosure Risk (R-Package: synthpop with own Improvements)
@@ -137,11 +137,6 @@ synthetic$fy_gpa <- round(synthetic$fy_gpa,2)
 
 # Disclosure Risk  - own metric
 disclosure_own <- generate_uniques_pp_for_sat(original, synthetic)
-
-# Data Frame Own Metric
-#pp <- 
-#  data.frame(`Replication Uniques.` = disclosure_own$replications_orig,  `Disclosure Count` = #disclosure_own$count_disclosure, `Disclosure Percentage` = disclosure_own$per_replications)
-
 
 kbl(disclosure_own) %>%
     kable_classic("striped", full_width = F)
@@ -322,4 +317,8 @@ The following histograms shows that `epochs = 10` produces way worse results in 
 result2$comp$plots
 ```
 
-**The risk measures did not change significantly, thus higher epoch values were a clear benefit. (at the cost of computation time)**
+```{r}
+result2$ut$utility.plot
+```
+
+Since the risk measures **did not change significantly**, **higher epoch** values were a **clear benefit**. (at the cost of computation time)
