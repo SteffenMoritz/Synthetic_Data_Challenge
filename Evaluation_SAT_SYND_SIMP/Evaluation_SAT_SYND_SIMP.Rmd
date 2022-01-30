@@ -1,6 +1,6 @@
 ---
-title: SAT Dataset Evaluation Report - Method Simulated Data (Simple Approach)
-subtitle: Use Case School testing
+title: SATGPA - Simulated Data
+subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
 date: January 28, 2022
 output:

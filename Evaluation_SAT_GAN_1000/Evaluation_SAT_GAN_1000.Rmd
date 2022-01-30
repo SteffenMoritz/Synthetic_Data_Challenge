@@ -1,6 +1,6 @@
 ---
-title: SAT Dataset Evaluation Report - Method GAN_v2
-subtitle: Use Case School testing
+title: SATGPA - Generative Adversarial Network (GAN)
+subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
 date: January 28, 2022
 output:
