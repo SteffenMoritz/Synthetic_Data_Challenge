@@ -273,8 +273,11 @@ kbl(data.frame(Mean_KS_not_signif = round(mean(result$ks > 0.05), 2))) %>%
 
 To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor). 
 
-```{r}
-result$cio$mhd_05
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+mahdist <- data.frame(`Mahalanobis Distance` = result$cio$mhd_05)
+
+kbl(mahdist) %>%
+  kable_paper(full_width = F) 
 ```
 
 
@@ -326,8 +329,17 @@ The value of this information loss criterion is between 0 (no information loss) 
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 
-result$il
+infloss <- data.frame(`Information Loss` = result$il[1])
+kbl(infloss) %>%
+  kable_paper(full_width = F) 
+```
 
+Individual Distances for Information Loss:
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+temp <- attr(result$il, "indiv_distances")
+
+kbl(data.frame(as.list(temp))) %>%
+  kable_paper(full_width = F) 
 ```
 
 
