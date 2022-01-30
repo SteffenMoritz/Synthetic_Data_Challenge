@@ -1,0 +1,228 @@
+---
+title: ACS Dataset Evaluation Report - Method Simulated Data (Simple Approach)
+subtitle: Use Case School testing
+author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
+date: January 28, 2022
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+    toc_depth: 1
+# pdf_document:
+#    toc: true
+#    toc_depth: 1
+---
+
+
+
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+library("kableExtra")
+```
+
+```{r dataset, include=FALSE}
+# Load Source Dataset
+load(here::here("results/pums_syn_syndatcart.RData"))
+load(here::here("Evaluation_ACS_SYND_SIMP/results_acs_synd.RData"))
+#load(here::here("acs.RData"))
+result <- results_acs_sat_mnorm_simple
+orig <- as.data.frame(orig)
+synd <- as.data.frame(synd)
+original <- orig
+synthetic <- synd
+```
+# Executive Summary
+
+According to our utility measures, simulated data using a multivariate normal distribution for (semi-)continuous variables and expanding it using FCS (CART) for the categorical variables is not a useful strategy to generate suitable synthetic data from the ACS dataset. The first impression of barely aligning marginal distributions is underpinned by further metrics. Only the Pearson correlation coefficients for binary and (semi-)continuous variables are close to those of the original dataset ("lower right corner"). The S_pMSE for tables and for distributions shows extreme values. Also the absolute difference in densities and the Bhattacharyya distance support the overall impression. Mlodak's information loss criterion indicates this synthetic dataset as not useful apart from testing technology.
+
+
+
+
+Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+
+**Releasing to public: NO ** 
+
+**Testing analysis: NO **
+
+**Education: NO **
+
+**Testing technology: YES**
+
+
+
+# Dataset Considerations
+
+
+# Method Considerations
+We fit a multivariate normal distribution on the (semi-)continuous variables, e.g. income related variables, and expand the dataset using FCS (Cart) by further categorical variables. The fit of the multivariate normal distribution is crucial for the overall quality. One can assume a poor overall usability if the (few) starting variables do not mimic the original variables adequately. Some variables were censored at zero in cases where the respective draw delivered negative values if the original variable did not contain negative values. The variable for the total income was calculated by the sum of the other income components to assess consistency.
+
+
+
+# Utility Evaluation
+
+Different utility measures are applied in this section. These utility measures are the basis of utility evaluation for the generated synthetic dataset. The R packages synthpop, sdcMicro and corrplot were used to compute the following metrics. We do not use tests incorporating significance here. Confidence intervals in large surveys often tend to be extremely small so many slight differences appear to be significant. We do not consider the variable PUMA for our utility evaluation. During the ACS reports, some minor changes in availability regarding plots might occur. This is caused by the application of standardised scripts on different synthetic datasets.
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp1$plots
+result$comp2$plots
+result$comp3$plots
+result$comp4$plots
+result$comp5$plots
+
+```
+
+
+
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(cor(as.data.frame(lapply(orig[,names(synd)%in%acs_num_bin], function(x)as.numeric(as.character(x))))), method = "color", type = "lower")
+cp2_1 = corrplot(cor(as.data.frame(lapply(synd[,names(synd)%in%acs_num_bin], function(x)as.numeric(as.character(x))))), method = "color", type = "lower")
+```
+
+
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero. The S_pMSE (standardised pMSE) should not exceed 10 and for a good fit below 3 according to Raab (2021, https://unece.org/sites/default/files/2021-12/SDC2021_Day2_Raab_AD.pdf)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp1$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug1$pMSE, S_pMSE = result$ug1$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp2$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug2$pMSE, S_pMSE = result$ug2$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp3$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug3$pMSE, S_pMSE = result$ug3$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp4$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug4$pMSE, S_pMSE = result$ug4$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp5$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug5$pMSE, S_pMSE = result$ug5$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Two-way tables are evaluated based on the original and the synthetic dataset based on S_pMSE (see above). We also present the results for the mean absolute difference in densities (MabsDD) and the Bhattacharyya distance (dBhatt).
+
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut1_1$utility.plot
+result$ut1_2$utility.plot
+result$ut1_3$utility.plot
+result$ut1_4$utility.plot
+result$ut1_5$utility.plot
+
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut2_1$utility.plot
+result$ut2_2$utility.plot
+result$ut2_3$utility.plot
+result$ut2_4$utility.plot
+result$ut2_5$utility.plot
+
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut3_1$utility.plot
+result$ut3_2$utility.plot
+result$ut3_3$utility.plot
+result$ut3_4$utility.plot
+result$ut3_5$utility.plot
+
+```
+
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+result$il
+
+```
+
+
+# Tuning and Optimizations
+Addtionally to fitting multivariate normal distributions, we tested an approach with non-normal multivariate distributions. We were not able to fit a more flexibel multivariate distributions, supposedly caused among other characteristics by extreme skewness in some variables.
