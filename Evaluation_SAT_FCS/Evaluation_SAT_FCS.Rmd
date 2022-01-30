@@ -74,27 +74,25 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 We decided to use the FCS method for multiple reasons. For one the use of the FCS method is fairly simple and straightforward, since no prior knowledge of the relation between the data is necessary. Secondly, the R package “synthpop” already comes with a good implementation of the method. Thirdly, and maybe most importantly, the method can be used for nearly all types of datasets and yield meaningful results.
 
 For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the Classification and Regression Tree (CART) machine learning model for each variable. 
-For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested. This is obviously out of the scope of this challenge.
-
+For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested. 
 
 # Privacy and Risk Evaluation
-
 ### Disclosure Risk (R-Package: synthpop with own Improvements)
-
-Our starting point was the **matching of unique records**, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: `replicated.uniques`. But we realized, one downside of just using `replicated.uniques` is that it does **not consider almost exact matches in numeric data**. Imagine a dataset with information about the respondents’ income. If there is a matching data point in the synthetic dataset for a unique person in the original dataset, that only differs by a slight margin, the original function would not identify this as a match. **Our solution** was, to  borrow the notion of the **p% rule** from **cell suppression methods**, which identifies a data point as critical, if one can guess the original values with **some error of at most p%**. Thus, **our improved risk measure** is also able to evaluate disclosure risk in numeric data.
-
+Our starting point was the **matching of unique records**, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: `replicated.uniques`. However, one downside of just using `replicated.uniques` is that it does **not consider almost exact matches in numeric variables**. Imagine a data set with information about the respondents’ income. If there is a matching data point in the synthetic data set for a unique person in the original data set, that only differs by a slight margin, the original function would not identify this as a match. **Our solution** is to  borrow the notion of the **p% rule** from **cell suppression methods**, which identifies a data point as critical, if one can guess the original values with **some error of at most p%**. Thus, **our improved risk measure** is  able to evaluate disclosure risk in numeric data.
 Our Uniqueness-Measure for **“almost exact”** matches provides us with the following outputs:
 
 - **Replication Uniques**
-|   Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
+|   Number of unique records in the synthetic data set that replicates unique records in the original data set w.r.t. their quasi-identifying variables. In brackets, the proportion of replicated uniques in the synthetical data set relative to the original data set size is stated.
 
-- **Disclosure Count**
-|   Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
+- **Disclosure in >= 1 CVar**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable, i.e. there is at least one confidential variable where the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
 
-- **Disclosure Percentage**
-|   The proportion of synthetic data that are too close to original data relative to the original dataset size.
+- **Disclosure in 2 CVars**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in both confidential variables, i.e. in both of the confidential variables the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
 
-For our selected best solution for the synthetic generation methods, we got the following results:
+
+For our selected best parametrized solution in this method-category, we got the following results:
+
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)

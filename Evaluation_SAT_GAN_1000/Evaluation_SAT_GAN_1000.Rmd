@@ -25,10 +25,12 @@ library("kableExtra")
 
 ```{r dataset, include=FALSE}
 # Load Source Dataset
+load(here::here("results/sm_sat_gan_ctgan.rda"))
 load(here::here("results/sm_sat_gan_ctgan_epoch1000.rda"))
 load(here::here("results/results_sat2.RData"))
 load(here::here("satgpa.rda"))
 result <- results_sm_sat_gan_ctgan_epoch1000
+result2 <- results_sm_sat_gan_ctgan
 original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(result_gan)
 ```
@@ -74,74 +76,24 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 
 # Method Considerations
 
+**GANs** are in comparison to the other methods a **relatively recent method** (Goodfellow, et al., 2014). For our experiments we used the **sdv** python libraries. We employed **ctgan** (Conditional GAN) and **CopulaGAN** for our analysis. We also tried using the R package **ganGenerativeData**, but because we were not able to use all variable types as input, the results with ganGenerativeData were not on the same level as with svd. For the  SAT dataset computing time with GAN seemed reasonable. Yet, already for SAT as we were using ctgan with **epochs** settings of over 1000, the **process already took hours**. For ACS we had to cancel several runs, after not completing after 8 hours computing time. This clearly shows, that the GAN method has it's limits when dealing with large and complex datasets. Dedicated computing infrastructure would be quite useful in these cases. Data utility wise (especially for the lower epoch settings) the resulting synthetic dataset differed significantly from the original data. In comparison to the other methods the GAN seemed to create implausible values more often. E.g. negative values for variables, that are known to be only positive. While the tendency to slightly **extrapolate** might seem negative at first, this can also be a positive e.g. when the original dataset itself is only a sample or when the method is used to create technical test data.
 
 # Privacy and Risk Evaluation
+### Disclosure Risk (R-Package: synthpop with own Improvements)
+Our starting point was the **matching of unique records**, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: `replicated.uniques`. However, one downside of just using `replicated.uniques` is that it does **not consider almost exact matches in numeric variables**. Imagine a data set with information about the respondents’ income. If there is a matching data point in the synthetic data set for a unique person in the original data set, that only differs by a slight margin, the original function would not identify this as a match. **Our solution** is to  borrow the notion of the **p% rule** from **cell suppression methods**, which identifies a data point as critical, if one can guess the original values with **some error of at most p%**. Thus, **our improved risk measure** is  able to evaluate disclosure risk in numeric data.
+Our Uniqueness-Measure for **“almost exact”** matches provides us with the following outputs:
 
-## Measuring Disclosure Risk - An Improvement of Uniqueness-Measure
+- **Replication Uniques**
+|   Number of unique records in the synthetic data set that replicates unique records in the original data set w.r.t. their quasi-identifying variables. In brackets, the proportion of replicated uniques in the synthetical data set relative to the original data set size is stated.
 
-Starting point for our considerations was the matching on unique records method as described in the chapter on disclosure risk measures in the starter guide. The R package synthpop provided us with an easy to use implementation of this method: replicated.uniques. While using it we noticed that the meaningfulness of this measure is quite limited, if numeric variables are contained in the data. For example, one of the issues is the fact that you cannot match features, if they consist of a different number of decimals.
-Additionally, in our opinion not only exact matches of unique data are troublesome, but also “almost exact” matches. Imagine a dataset with information about the respondents’ income. If for a unique person in the original dataset there exists a matching data point in the synthetic dataset that only differs in the income by 2%, the original function would not identify this as a match. So we borrowed the notion of the p% rule from cell suppression methods which identifies a data point as critical, if one can guess the original values with some error of at most p%.
+- **Disclosure in >= 1 CVar**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable, i.e. there is at least one confidential variable where the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
 
-With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches and provides us with the following values:
-
-**replications_uniques**
-|   Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.
-
-**count_disclosure**
-|   Number of synthetic data that are too close to the original data. We identify two data as "too close" if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%. 
-
-**per_disclosure**
-|   The proportion of synthetic data that are too close to original data relative to the original dataset size.
-
-We used this measure on all the synthetic data sets of the challenge. 
+- **Disclosure in 2 CVars**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in both confidential variables, i.e. in both of the confidential variables the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
 
 
-```{r, echo=FALSE, warning = FALSE, message= FALSE}
-library(synthpop)
-library(dplyr)
-
-generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
-  syn_synth <- list(m = 1, syn = df_synth)
-  replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
-}
-
-generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p = 0.05){
-  syn_synth <- list(m = 1, syn = df_synth[,identifiers])
-  syn_orig <- list(m = 1, syn = df_orig[,identifiers])
-  
-  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])$replications
-  repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
-  
-
-  df <- inner_join(df_synth[repl_synth,], df_orig[repl_orig,], 
-                   by=names(df_orig)[identifiers], 
-                   suffix = c("_synth", "_orig"))
-  
-  count_disclosure <- df %>%
-    mutate(hs_gpa_diff = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig), 
-           fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
-    filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
-    count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
-}
-
-# Disclosure Risk
-disclosure <- generate_uniques_for_sat(original, synthetic)
-
-# Perceived disclosure risk
-disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
-
-pp3 <- data.frame(`Metric` = c("Actual Risk"), 
-                 `Number Uniques` = c( disclosure$no.uniques), 
-                 `Number Replications` = c(disclosure$no.replications ),  
-                 `Percentage Replications` = c(disclosure$per.replications)
-                 )
-
-
-kbl(pp3) %>%
-  kable_paper(full_width = F) 
-```
+For our selected best parametrized solution in this method-category, we got the following results:
 
 ```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
 library(synthpop)
@@ -151,63 +103,70 @@ generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
   syn_synth <- list(m = 1, syn = df_synth)
   replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
 }
-
 generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p = 0.05){
   syn_synth <- list(m = 1, syn = df_synth[,identifiers])
   syn_orig <- list(m = 1, syn = df_orig[,identifiers])
-  
-  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])$replications
+  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])
   repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
-  
-
-  df <- inner_join(df_synth[repl_synth,], df_orig[repl_orig,], 
-                   by=names(df_orig)[identifiers], 
+  df <- inner_join(df_synth[repl_synth$replications,], df_orig[repl_orig,],
+                   by=names(df_orig)[identifiers],
                    suffix = c("_synth", "_orig"))
-  
+  sum_repl_synth  <- sum(repl_synth$replications)
   count_disclosure <- df %>%
-    mutate(hs_gpa_diff = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig), 
-           fy_gpa_diff = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) ) %>%
-    filter(hs_gpa_diff < p | fy_gpa_diff < p)%>%
-    count(.)
-  result = list(replications_synth = sum(repl_synth),replications_orig = sum(repl_orig),
-                count_disclosure = count_disclosure[1,1], per_replications = 100*count_disclosure[1,1]/nrow(df_synth))
+    mutate(hs_gpa_discl = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig)< p,
+           fy_gpa_discl = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) < p,
+           at_least_1_discl = hs_gpa_discl | fy_gpa_discl,
+           at_least_2_discl = hs_gpa_discl & fy_gpa_discl) %>%
+    summarize(sum_hs_gpa_discl = sum(hs_gpa_discl),
+              sum_fy_gpa_discl = sum(fy_gpa_discl),
+              sum_at_least_1_discl = sum(at_least_1_discl),
+              sum_at_least_2_discl = sum(at_least_2_discl)) %>%
+    mutate(#hs_gpa_discl = paste0(sum_hs_gpa_discl, " (",round(sum_hs_gpa_discl/sum_repl_synth,4)*100, "%)"),
+           #unique_orig = repl_synth$no.uniques,
+           'Replication.Uniques' = paste0(repl_synth$no.replications, " (",round(repl_synth$no.replications/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.>=1.CVar' = paste0(sum_at_least_1_discl, " (",round(sum_at_least_1_discl/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.2.CVars' = paste0(sum_at_least_2_discl, " (",round(sum_at_least_2_discl/nrow(df_orig),4)*100, "%)"),
+           )%>%
+    select('Replication.Uniques' , 'Disclosure.in.>=1.CVar', 'Disclosure.in.2.CVars')
+  count_disclosure
 }
 
 
 synthetic$hs_gpa <- round(synthetic$hs_gpa,2)
 synthetic$fy_gpa <- round(synthetic$fy_gpa,2)
 
-# Disclosure Risk  - selbstentwickelt
+# Disclosure Risk  - own metric
 disclosure_own <- generate_uniques_pp_for_sat(original, synthetic)
 
-
-
 # Data Frame Own Metric
-pp <- data.frame(`Replications Orig.` = disclosure_own$replications_orig, `Replications Synth.` = disclosure_own$replications_synth, `Count Disclosure` = disclosure_own$count_disclosure, `Percentage Disclosure` = disclosure_own$per_replications)
+#pp <- 
+#  data.frame(`Replication Uniques.` = disclosure_own$replications_orig,  `Disclosure Count` = #disclosure_own$count_disclosure, `Disclosure Percentage` = disclosure_own$per_replications)
 
 
-
-
-
-
-
-kbl(pp) %>%
+kbl(disclosure_own) %>%
     kable_classic("striped", full_width = F)
 
 
 ```
 
 
-## Perceived Disclosure Risk
-Unique records in the synthetical dataset may be mistaken for unique records in the original data. This may lead to disadvantages for the underlying respondent, even if the record of the synthetical record differs significantly to the original record  in the confidential variable. The perceived risk is measured by matching the unique records among the datasets based on the identifying variables, e.g. sex, age, adress. We applied the method replicated.uniques of the synthpop-R-package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matchings is preferred to minimize the perceived disclosure risk. 
+## Perceived Disclosure Risk (R-Package: synthpop)
+Unique records in the synthetic dataset may be **mistaken for unique records**  based on the fact, that 
+**only the identifying variables match**. This can lead to problems, even if the associated confidential variables significantly differ from the original record. E.g. people might assume a certain income for a person, because they believe to have identified him from the identifying variables. Even if his real income **is not leaked** (as the confidential variables are different), this assumed (but wrong) information about him **might lead to disadvantages**. The **perceived risk** is measured by matching the unique records among the identifying variables, in our case `sex`, `sat_v`, `sat_m`and `sat_sum`. We applied the method `replicated.uniques` of the synthpop package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matches (referred to as Number Replications) is preferred to minimize the perceived disclosure risk. 
 
+These are the results variables for perceived disclosure risk:
 
+- **Number Uniques**
+|   Number of unique individuals in the original data set. 
 
+- **Number Replications**
+|   The number of matching records in the synthetic data set (based only on identifying variables). This is the number of individuals, which might perceived as disclosed (real disclosures would also count into this metric)
 
+- **Percentage Replications**
+|   The calculated percentage of duplicates in the synthetic data 
 
+For our selected best parametrized solution in this method-category, we got the following results:
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
-# Disclosure Risk
-disclosure <- generate_uniques_for_sat(original, synthetic)
 
 # Perceived disclosure risk
 disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
@@ -219,21 +178,15 @@ pp2 <- data.frame(`Metric` = c("Perceived Risk"),
                  `Percentage Replications` = c(disclosure_percei$per.replications)
                  )
 
-pp3 <- data.frame(`Metric` = c("Perceived Risk", "Actual Risk"), 
-                 `Number Uniques` = c(disclosure_percei$no.uniques, disclosure$no.uniques), 
-                 `Number Replications` = c(disclosure_percei$no.replications,disclosure$no.replications ),  
-                 `Percentage Replications` = c(disclosure_percei$per.replications, disclosure$per.replications)
-                 )
-
-
 kbl(pp2) %>%
-  kable_paper(full_width = F) 
+  kable_classic(full_width = F) 
 ```
 
 
 # Utility Evaluation
 
-Different utility measuers are applied in this section. These utilita measures are the basis of the utility evaluation of the generated synthetic dataset.
+Different utility measures are applied in this section. These utility measures are the basis of the utility evaluation of the generated synthetic dataset. These are the utility measures for our selected dataset after optimization and tuning.
+
 
 ### Graphical Comparison for Margins (R-Package: synthpop)
 
@@ -275,7 +228,7 @@ kbl(data.frame(Mean_KS_not_signif = round(mean(result$ks > 0.05), 2))) %>%
 
 To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor). 
 
-```{r}
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
 mahdist <- data.frame(`Mahalanobis Distance` = result$cio$mhd_05)
 
 kbl(mahdist) %>%
@@ -346,3 +299,27 @@ kbl(data.frame(as.list(temp))) %>%
 
 
 # Tuning and Optimizations
+
+For optimizing the results of the **GAN method** we tried to **optimize parameters** and tried **different types of GAN algorithms**.
+
+### Epochs parameter
+For parameter tuning we tried different parameters for the `epochs` argument of **ctgan**. Clearly it could be seen, the more `epochs` we used, the better the results got (of course with decreasing gains). Or final model was calculated with `epochs = 1000`. The results of the final model can be seen in the utility evaluation chapter. In comparison e.g. the utility result of using `epochs = 10` yielded way worse results.
+
+This can be clearly seen from the following **pMSE** and **S_pMSE** values for **ctgan** / `epochs = 10`.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- data.frame(pMSE = result2$ug$pMSE, S_pMSE = result2$ug$S_pMSE)
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+This is clearly worse than the 0.1187 and	3.03237 with epochs = 1000. In our experiments a clear trend of improving S_pMSE numbers with higher epoch values.
+
+
+The following histograms shows that `epochs = 10` produces way worse results in comparison to our final model.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result2$comp$plots
+```
+
+**The risk measures did not change significantly, thus higher epoch values were a clear benefit. (at the cost of computation time)**
