@@ -32,7 +32,7 @@ result <- results_acs_gane30
 ```
 # Executive Summary
 
-GAN (epoch 30) produces at a first glance useful marginal disbrituions and therefore seems to be fair strategy for the generation of synthetic "ACS"-data. This first positive impression is supported by the the Pearson correlation coefficients for binary and (semi-)continuous variables and immediatly massivly deteriorated by the following metrics. The S_pMSE shows extreme values througout. Also the absolute difference in densities and the Bhattacharyya are not supporting a high utility although they show for particular two-way cells good results. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful. In general, the results are not different to GAN (epoch 10).
+GAN (epoch 30) produces at a first glance useful marginal distributions and therefore seems to be fair strategy for the generation of synthetic "ACS"-data. This first positive impression is supported by the the Pearson correlation coefficients for binary and (semi-)continuous variables and immediately massively deteriorated by the following metrics. The S_pMSE shows extreme values throughout. Also the absolute difference in densities and the Bhattacharyya distance are not supporting a high utility although they show good results for particular two-way cells. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful. In general, the results are not different to GAN (epoch 10).
 
 
 
@@ -50,7 +50,10 @@ Based on the results of this document, we rate the suitability of this synthetic
 
 
 # Dataset Considerations
-
+When deciding, if data is released to the public it is of utmost importance to define, which variables are the most relevant in terms of privacy and utility. This domain and country specific, since different areas of the world have different privacy legislation and feature specific overall circumstances. This step would require input and discussions with actual domain experts. Since we are foreign to US privacy law, the assumptions made for the Synthetic Data Challenge are basically an educated guess from our side.
+From a utility perspective it is important to know which variables and correlations are most interesting for actual users of the created synthetic dataset. Different use cases might require focus on different variables and correlations. We could not single out a most important variable, thus in our utility analysis we decided to focus on the overall utility and not to prioritize a specific variable.
+We decided to remove the first column of the ACS dataset, since it only contains column numbers and hence doesn’t need to be altered by any means.
+From a privacy perspective it has to be decided, which variables are confidential and which are identifying. As already mentioned, specifying this depends on multiple factors e.g. regulations or also other public information, that could be used for de-anonymization. For our analysis, we made the following assumptions: Of course any information about income has to be considered as confidential, otherwise publishing income statistics would be a way easier task for NSOs than it actually is. So INCTOT, INCWAGE, INCWELFR, INCINVST, INCEARN and POVERTY are treated as confidential variables. Additionally the times a person is not at home also is an information that encroaches in personal right and might be to the respondents detriment e.g. by burglars. The features HHWT and PERWT are weights that only present information about the way the dataset was created and hence are neither confidential nor identifying. All the other information (like Sex, Age, Race…) contain observable information and hence, in our opinion, are identifying variables.
 
 # Method Considerations
 
