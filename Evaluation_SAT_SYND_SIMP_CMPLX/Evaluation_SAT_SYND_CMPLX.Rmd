@@ -156,7 +156,8 @@ These are the results variables for perceived disclosure risk:
 - **Percentage Replications**
 |   The calculated percentage of duplicates in the synthetic data 
 
-For our selected best solution for the synthetic generation methods, we got the following results:
+For our selected best parametrized solution in this method-category, we got the following results:
+
 ```{r, echo=FALSE, warning = FALSE, message= FALSE}
 
 # Perceived disclosure risk
