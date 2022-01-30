@@ -1,0 +1,222 @@
+---
+title: ACS Dataset Evaluation Report - GAN (e30)
+subtitle: Use Case School testing
+author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
+date: January 28, 2022
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+    toc_depth: 1
+# pdf_document:
+#    toc: true
+#    toc_depth: 1
+---
+
+
+
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+library("kableExtra")
+```
+
+```{r dataset, include=FALSE}
+# Load Source Dataset
+load(here::here("results/sm_acs_gan_ctgan_epoch30.rda"))
+load(here::here("Evaluation_ACS_GANe30/results_acs_gane30_2.RData"))
+#load(here::here("acs.RData"))
+result <- results_acs_gane30
+```
+# Executive Summary
+
+GAN (epoch 30) produces at a first glance useful marginal disbrituions and therefore seems to be fair strategy for the generation of synthetic "ACS"-data. This first positive impression is supported by the the Pearson correlation coefficients for binary and (semi-)continuous variables and immediatly massivly deteriorated by the following metrics. The S_pMSE shows extreme values througout. Also the absolute difference in densities and the Bhattacharyya are not supporting a high utility although they show for particular two-way cells good results. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful. In general, the results are not different to GAN (epoch 10).
+
+
+
+
+Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+
+**Releasing to public: NO ** 
+
+**Testing analysis: NO **
+
+**Education: YES **
+
+**Testing technology: YES, but too elaborated **
+
+
+
+# Dataset Considerations
+
+
+# Method Considerations
+
+
+
+# Utility Evaluation
+
+Different utility measures are applied in this section. These utility measures are the basis of utility evaluation for the generated synthetic dataset. The R packages synthpop, sdcMicro and corrplot were used to compute the following metrics. We do not use tests incorporating significance here. Confidence intervals in large surveys often tend to be extremely small so many slight differences appear to be significant. We do not consider the variable PUMA for our utility evaluation. During the ACS reports, some minor changes in availability regarding plots might occur. This is caused by the application of standardised scripts on different synthetic datasets.
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp1$plots
+result$comp2$plots
+result$comp3$plots
+result$comp4$plots
+result$comp5$plots
+
+```
+
+
+
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(results_acs_gane30[[5]], method = "color", type = "lower")
+corrplot(results_acs_gane30[[6]], method = "color", type = "lower")
+```
+
+
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero. The S_pMSE (standardised pMSE) should not exceed 10 and for a good fit below 3 according to Raab (2021, https://unece.org/sites/default/files/2021-12/SDC2021_Day2_Raab_AD.pdf)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp1$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug1$pMSE, S_pMSE = result$ug1$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp2$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug2$pMSE, S_pMSE = result$ug2$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp3$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug3$pMSE, S_pMSE = result$ug3$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp4$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug4$pMSE, S_pMSE = result$ug4$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp5$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug5$pMSE, S_pMSE = result$ug5$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Two-way tables are evaluated based on the original and the synthetic dataset based on S_pMSE (see above). We also present the results for the mean absolute difference in densities (MabsDD) and the Bhattacharyya distance (dBhatt).
+
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut1_1$utility.plot
+result$ut1_2$utility.plot
+result$ut1_3$utility.plot
+result$ut1_4$utility.plot
+result$ut1_5$utility.plot
+
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut2_1$utility.plot
+result$ut2_2$utility.plot
+result$ut2_3$utility.plot
+result$ut2_4$utility.plot
+result$ut2_5$utility.plot
+
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut3_1$utility.plot
+result$ut3_2$utility.plot
+result$ut3_3$utility.plot
+result$ut3_4$utility.plot
+result$ut3_5$utility.plot
+
+```
+
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+result$il
+
+```
+
+
+# Tuning and Optimizations
