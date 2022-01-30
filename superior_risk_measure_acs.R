@@ -6,6 +6,7 @@ load("results/rt_acs_fcs_samp100000.rda")
 df_orig <- ACS_samp100000#pums
 df_synth <- ACS_synth_samp100000
 #make PUMA integer and remove non-necessary cols, weights are not considered
+
 df_orig$X <- NULL
 df_synth$X <- NULL
 df_orig$PERWT <- NULL
@@ -17,7 +18,7 @@ df_synth$HHWT <- NULL
 df_orig$PUMA <- as.numeric(unlist(lapply(df_orig$PUMA, function(x)gsub("-","",x))))
 df_synth$PUMA <- as.numeric(unlist(lapply(df_synth$PUMA, function(x)gsub("-","",x))))
 
-generate_uniques_for_acs <-function(df_orig, df_synth, exclude = c("HHWT")){
+generate_uniques_for_acs <-function(df_orig, df_synth, exclude = c("INCTOT","INCWAGE","INCWELFR", "INCINVST", "INCEARN", "POVERTY", "DEPARTS", "ARRIVES")){
   syn_synth <- list(m = 1, syn = df_synth)
   replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
 }
@@ -53,7 +54,7 @@ generate_uniques_pp_for_acs <-function(df_orig, df_synth,identifiers = 1:which(n
 result <- generate_uniques_pp_for_acs(df_orig, df_synth)
 result
 
-generate_uniques_for_acs(as.data.frame(df_orig), df_synth)#, exclude = c("hs_gpa", "fy_gpa") )
+generate_uniques_for_acs(df_orig, df_synth) #, exclude = c("hs_gpa", "fy_gpa") )
 
 #generate_uniques_for_sat(as.data.frame(df_orig), df_synth, exclude = )
 
