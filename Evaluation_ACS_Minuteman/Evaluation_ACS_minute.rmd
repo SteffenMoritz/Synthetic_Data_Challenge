@@ -1,5 +1,5 @@
 ---
-title: ACS Dataset Evaluation Report - GAN (e30)
+title: ACS Dataset Evaluation Report - Minuteman
 subtitle: Use Case School testing
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
 date: January 28, 2022
@@ -25,15 +25,14 @@ library("kableExtra")
 
 ```{r dataset, include=FALSE}
 # Load Source Dataset
-load(here::here("results/sm_acs_gan_ctgan_epoch30.rda"))
-load(here::here("Evaluation_ACS_GANe30/results_acs_gane30_2.RData"))
+load(here::here("results/sm_acs_minuteman.rda"))
+load(here::here("Evaluation_ACS_Minuteman/results_acs_minute_2.RData"))
 #load(here::here("acs.RData"))
-result <- results_acs_gane30
+result <- results_acs_minute
 ```
 # Executive Summary
 
-GAN (epoch 30) produces at a first glance useful marginal distributions and therefore seems to be fair strategy for the generation of synthetic "ACS"-data. This first positive impression is supported by the the Pearson correlation coefficients for binary and (semi-)continuous variables and immediately massively deteriorated by the following metrics. The S_pMSE shows extreme values throughout. Also the absolute difference in densities and the Bhattacharyya distance are not supporting a high utility although they show good results for particular two-way cells. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful. In general, the results are not different to GAN (epoch 10).
-
+At a first glance, Minuteman does not produces useful marginal distributions for "ACS"-data. This first negative impression is supported by the the Pearson correlation coefficients for binary and (semi-)continuous variables, which are often close to zero. The S_pMSE shows extreme values throughout. Also the absolute difference in densities and the Bhattacharyya distance are not supporting a high utility although they show good results for particular two-way cells. The synthetic dataset is also according to Mlodak's information loss criterion not useful.  
 
 
 
@@ -88,8 +87,8 @@ Synthetic Datasets should represent the dependencies of the original datasets. T
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 library("corrplot")
 par(mfrow=c(1,2))
-corrplot(results_acs_gane30[[5]], method = "color", type = "lower")
-corrplot(results_acs_gane30[[6]], method = "color", type = "lower")
+corrplot(results_acs_minute[[5]], method = "color", type = "lower")
+corrplot(results_acs_minute[[6]], method = "color", type = "lower")
 ```
 
 
