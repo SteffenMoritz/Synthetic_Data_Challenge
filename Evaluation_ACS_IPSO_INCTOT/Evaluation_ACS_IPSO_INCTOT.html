@@ -77,6 +77,9 @@
 </div>
 <div id="method-considerations" class="section level1">
 <h1>Method Considerations</h1>
+<p>Similar to the FCS-method, IPSO is easy to understand and to explain, since it is based on classic linear regression. For applying IPSO, we chose the R package RegSDC that provides a framework containing several versions of the method. We applied the classical version of IPSO provided by the function RegSDCipso.</p>
+<p>IPSO requires to split up the variables in non-confidential ones and confidential ones. It assumes statistical independence among the non-confidential variables and multivariate normally distributed confidential variables. The assumption is strong and holds in general not for the ACS dataset, therefore poor quality of the synthetical data is inevitable. We classified the sat-related variables and sex as non-confidential and the gpa-related variables as confidential.</p>
+<p>The computation time for IPSO was superb. Since the basic assumptions of IPSO are not fulfilled in the ACS data set, we have dispensed with parameter tuning.</p>
 </div>
 <div id="utility-evaluation" class="section level1">
 <h1>Utility Evaluation</h1>
