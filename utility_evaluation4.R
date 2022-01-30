@@ -279,3 +279,59 @@ save(list = c("results_syn_sat_mnorm_simple",
 load(paste0(getwd(), "/results/results_sat2.RData"))
 
 
+
+
+
+
+
+
+
+
+
+# copulagan
+load("~/GitHub/SynDatCh/results/sm_sat_gan_copulagan.rda")
+result_copulagan <- h_dat_sat(result_copulagan)
+orig_sat <- as.data.frame(orig_sat)
+
+results_sm_sat_copulagan <- list(
+  comp = compare(result_copulagan, orig_sat, var = names(orig_sat)),
+  cp1 = corrplot(cor(sapply(orig_sat, as.numeric)), method = "color", type = "lower", main = "Original"),
+  cp2 = corrplot(cor(sapply(result_copulagan, as.numeric)), method = "color", type = "lower", main = "Synthetic"),
+  cio = cio(result_copulagan, orig_sat, y.vars),
+  ks = ks_check(orig_sat, result_copulagan),
+  il = IL_variables(orig_sat, result_copulagan),
+  ug = utility.gen(result_copulagan, as.data.frame(orig_sat)),
+  ut = utility.tables(as.data.frame(result_copulagan), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+)  
+
+
+save(list = c("results_sm_sat_copulagan"), file = paste0(getwd(), "/results/results_sat_copulagan_2.RData"))
+
+
+
+
+# minute
+load("~/GitHub/SynDatCh/results/sm_sat_minuteman.rda")
+sm_sat_minuteman <- h_dat_sat(as.data.frame(sm_sat_minuteman))
+orig_sat <- as.data.frame(orig_sat)
+set.seed(3280)
+orig_sat <- orig_sat[sample(1:1000, size = nrow(sm_sat_minuteman)),]
+
+results_sm_sat_minute <- list(
+  comp = compare(sm_sat_minuteman, orig_sat, var = names(orig_sat)),
+  cp1 = corrplot(cor(sapply(orig_sat, as.numeric)), method = "color", type = "lower", main = "Original"),
+  cp2 = corrplot(cor(sapply(sm_sat_minuteman, as.numeric)), method = "color", type = "lower", main = "Synthetic"),
+  cio = cio(sm_sat_minuteman, orig_sat, y.vars),
+  ks = ks_check(orig_sat, sm_sat_minuteman),
+  il = IL_variables(orig_sat, sm_sat_minuteman),
+  ug = utility.gen(sm_sat_minuteman, as.data.frame(orig_sat)),
+  ut = utility.tables(as.data.frame(sm_sat_minuteman), as.data.frame(orig_sat), vars = names(orig_sat), max.scale = 20, tab.stats = c("pMSE", "S_pMSE", "MabsDD"))
+)  
+
+
+save(list = c("results_sm_sat_minute"), file = paste0(getwd(), "/results/results_sat_minute_2.RData"))
+
+
+
+
+
