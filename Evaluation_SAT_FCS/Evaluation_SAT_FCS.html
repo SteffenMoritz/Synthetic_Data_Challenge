@@ -14,106 +14,13 @@
 
 <meta name="date" content="2022-01-28" />
 
-<title>SAT Dataset Evaluation Report - Method FCS</title>
+<title>SATGPA - Fully Conditional Specification (FCS)</title>
 
 <script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 <script src="data:application/javascript;base64,JChkb2N1bWVudCkucmVhZHkoZnVuY3Rpb24oKXsKICAgIGlmICh0eXBlb2YgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwKCk7CiAgICB9CiAgICBpZiAoJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyKCk7CiAgICB9Cn0pOwo="></script>
 <link href="data:text/css,%0A%2Elightable%2Dminimal%20%7B%0Aborder%2Dcollapse%3A%20separate%3B%0Aborder%2Dspacing%3A%2016px%201px%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dminimal%20td%20%7B%0Amargin%2Dleft%3A%205px%3B%0Amargin%2Dright%3A%205px%3B%0A%7D%0A%2Elightable%2Dminimal%20th%20%7B%0Amargin%2Dleft%3A%205px%3B%0Amargin%2Dright%3A%205px%3B%0A%7D%0A%2Elightable%2Dminimal%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%2300000050%3B%0Aempty%2Dcells%3A%20hide%3B%0A%7D%0A%2Elightable%2Dminimal%20tbody%20tr%3Afirst%2Dchild%20td%20%7B%0Apadding%2Dtop%3A%200%2E5em%3B%0A%7D%0A%2Elightable%2Dminimal%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dminimal%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dclassic%20%7B%0Aborder%2Dtop%3A%200%2E16em%20solid%20%23111111%3B%0Aborder%2Dbottom%3A%200%2E16em%20solid%20%23111111%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0Amargin%3A%2010px%205px%3B%0A%7D%0A%2Elightable%2Dclassic%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dclassic%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%200%2E14em%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%20caption%20%7B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20td%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20th%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Afont%2Dweight%3A%20normal%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%200%2E10em%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dclassic%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20%7B%0Aborder%2Dtop%3A%203px%20double%20%23111111%3B%0Aborder%2Dbottom%3A%203px%20double%20%23111111%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%203px%20double%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20caption%20%7B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20td%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20th%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Afont%2Dweight%3A%20normal%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tbody%20tr%3Alast%2Dchild%20td%20%7B%0Aborder%2Dbottom%3A%203px%20double%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%20%7B%0Amin%2Dwidth%3A%20100%25%3B%0Awhite%2Dspace%3A%20nowrap%3B%0Atable%2Dlayout%3A%20fixed%3B%0Afont%2Dfamily%3A%20Roboto%2C%20sans%2Dserif%3B%0Aborder%3A%201px%20solid%20%23EEE%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dmaterial%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%23EEE%3B%0A%7D%0A%2Elightable%2Dmaterial%20th%20%7B%0Aheight%3A%2056px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0A%7D%0A%2Elightable%2Dmaterial%20td%20%7B%0Aheight%3A%2052px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Aborder%2Dtop%3A%201px%20solid%20%23eeeeee%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ddd%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20%7B%0Amin%2Dwidth%3A%20100%25%3B%0Awhite%2Dspace%3A%20nowrap%3B%0Atable%2Dlayout%3A%20fixed%3B%0Afont%2Dfamily%3A%20Roboto%2C%20sans%2Dserif%3B%0Aborder%3A%201px%20solid%20%23FFFFFF12%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0Amargin%2Dbottom%3A%2010px%3B%0Abackground%2Dcolor%3A%20%23363640%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20th%20%7B%0Aheight%3A%2056px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Acolor%3A%20%23FFFFFF60%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20td%20%7B%0Aheight%3A%2052px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Acolor%3A%20%23FFFFFF%3B%0Aborder%2Dtop%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dpaper%20%7B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0Acolor%3A%20%23444%3B%0A%7D%0A%2Elightable%2Dpaper%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dpaper%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%2300000020%3B%0A%7D%0A%2Elightable%2Dpaper%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Acolor%3A%20%23666%3B%0Avertical%2Dalign%3A%20bottom%3B%0Aborder%2Dbottom%3A%201px%20solid%20%2300000020%3B%0Aline%2Dheight%3A%201%2E15em%3B%0Apadding%3A%2010px%205px%3B%0A%7D%0A%2Elightable%2Dpaper%20td%20%7B%0Avertical%2Dalign%3A%20middle%3B%0Aborder%2Dbottom%3A%201px%20solid%20%2300000010%3B%0Aline%2Dheight%3A%201%2E15em%3B%0Apadding%3A%207px%205px%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%2300000008%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A" rel="stylesheet" />
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
-/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
-a.sourceLine {
-  pointer-events: auto;
-}
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
 
 
 
@@ -132,8 +39,8 @@ a.sourceLine {
 
 <header>
 <div class="inner">
-<h1 class="title toc-ignore">SAT Dataset Evaluation Report - Method FCS</h1>
-<h2 class="subtitle">Use Case School testing</h2>
+<h1 class="title toc-ignore">SATGPA - Fully Conditional Specification (FCS)</h1>
+<h2 class="subtitle">Evaluation Synthetic Data Creation</h2>
 <h3 class="author">Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)</h3>
 <h3 class="date">January 28, 2022</h3>
 </div>
@@ -164,10 +71,41 @@ a.sourceLine {
 <p><em>Created both a fully synthetic and a partially synthetic file</em> <em>Evidence of tuning</em></p>
 <p>According to our utility meausres, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak’s information loss criterion. Overall, we see satisfying results regarding the utility measures.</p>
 <p>Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:</p>
-<p><strong>Releasing to public: YES</strong></p>
-<p><strong>Testing analysis: YES</strong></p>
-<p><strong>Education: YES </strong></p>
-<p><strong>Testing technology: YES, but too elaborated</strong></p>
+<p><strong>USE CASE RECOMMENDATIONS</strong></p>
+<table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Releasing_to_Public
+</th>
+<th style="text-align:left;">
+Testing_Analysis
+</th>
+<th style="text-align:left;">
+Education
+</th>
+<th style="text-align:left;">
+Testing_Technology
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+YES
+</td>
+<td style="text-align:left;">
+YES
+</td>
+<td style="text-align:left;">
+YES
+</td>
+<td style="text-align:left;">
+MAYBE
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>
@@ -178,91 +116,59 @@ a.sourceLine {
 <div id="method-considerations" class="section level1">
 <h1>Method Considerations</h1>
 <p>We decided to use the FCS method for multiple reasons. For one the use of the FCS method is fairly simple and straightforward, since no prior knowledge of the relation between the data is necessary. Secondly, the R package “synthpop” already comes with a good implementation of the method. Thirdly, and maybe most importantly, the method can be used for nearly all types of datasets and yield meaningful results.</p>
-<p>For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the Classification and Regression Tree (CART) machine learning model for each variable. For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested. This is obviously out of the scope of this challenge.</p>
+<p>For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the Classification and Regression Tree (CART) machine learning model for each variable. For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested.</p>
 </div>
 <div id="privacy-and-risk-evaluation" class="section level1">
 <h1>Privacy and Risk Evaluation</h1>
-<div id="measuring-disclosure-risk---an-improvement-of-uniqueness-measure" class="section level2">
-<h2>Measuring Disclosure Risk - An Improvement of Uniqueness-Measure:</h2>
-<p>Starting point for our considerations was the matching on unique records method as described in the chapter on disclosure risk measures in the starter guide. The R package synthpop provided us with an easy to use implementation of this method: replicated.uniques. While using it we noticed that the meaningfulness of this measure is quite limited, if numeric variables are contained in the data. For example, one of the issues is the fact that you cannot match features, if they consist of a different number of decimals. Additionally, in our opinion not only exact matches of unique data are troublesome, but also “almost exact” matches. Imagine a dataset with information about the respondents’ income. If for a unique person in the original dataset there exists a matching data point in the synthetic dataset that only differs in the income by 2%, the original function would not identify this as a match. So we borrowed the notion of the p% rule from cell suppression methods which identifies a data point as critical, if one can guess the original values with some error of at most p%.</p>
-<p>With that in mind, we implemented a function generate_uniques_pp that gives a Uniqueness-Measure for “almost exact” matches and provides us with the following values:</p>
-<p><strong>replications_uniques</strong> | Number of unique data in the synthetic dataset that have an identifier combination that can also be found in the original dataset.</p>
-<p><strong>count_disclosure</strong> | Number of synthetic data that are too close to the original data. We identify two data as “too close” if their identifiers are equal and if there exists at least one additional features for which the original value and the synthetic value differ by at most p%.</p>
-<p><strong>per_disclosure</strong> | The proportion of synthetic data that are too close to original data relative to the original dataset size.</p>
-<p>We used this measure on all the synthetic data sets of the challenge.</p>
-<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<div id="disclosure-risk-r-package-synthpop-with-own-improvements" class="section level3">
+<h3>Disclosure Risk (R-Package: synthpop with own Improvements)</h3>
+<p>Our starting point was the <strong>matching of unique records</strong>, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: <code>replicated.uniques</code>. However, one downside of just using <code>replicated.uniques</code> is that it does <strong>not consider almost exact matches in numeric variables</strong>. Imagine a data set with information about the respondents’ income. If there is a matching data point in the synthetic data set for a unique person in the original data set, that only differs by a slight margin, the original function would not identify this as a match. <strong>Our solution</strong> is to borrow the notion of the <strong>p% rule</strong> from <strong>cell suppression methods</strong>, which identifies a data point as critical, if one can guess the original values with <strong>some error of at most p%</strong>. Thus, <strong>our improved risk measure</strong> is able to evaluate disclosure risk in numeric data. Our Uniqueness-Measure for <strong>“almost exact”</strong> matches provides us with the following outputs:</p>
+<ul>
+<li><p><strong>Replication Uniques</strong> | Number of unique records in the synthetic data set that replicates unique records in the original data set w.r.t. their quasi-identifying variables. In brackets, the proportion of replicated uniques in the synthetical data set relative to the original data set size is stated.</p></li>
+<li><p><strong>Disclosure in &gt;= 1 CVar</strong> | Number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable, i.e. there is at least one confidential variable where the record in the synthetical data set is “too close” to the matching unique record in the original data set. We identify two records as “too close” in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.</p></li>
+<li><p><strong>Disclosure in 2 CVars</strong> | Number of replicated unique records in the synthetical data set that have a real disclosure risk in both confidential variables, i.e. in both of the confidential variables the record in the synthetical data set is “too close” to the matching unique record in the original data set. We identify two records as “too close” in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.</p></li>
+</ul>
+<p>For our selected best parametrized solution in this method-category, we got the following results:</p>
+<table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-Metric
+Replication.Uniques
 </th>
-<th style="text-align:right;">
-Number.Uniques
+<th style="text-align:left;">
+Disclosure.in.&gt;=1.CVar
 </th>
-<th style="text-align:right;">
-Number.Replications
-</th>
-<th style="text-align:right;">
-Percentage.Replications
+<th style="text-align:left;">
+Disclosure.in.2.CVars
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-Actual Risk
+93 (9.3%)
 </td>
-<td style="text-align:right;">
-1000
+<td style="text-align:left;">
+40 (4%)
 </td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-1.6
-</td>
-</tr>
-</tbody>
-</table>
-<table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;">
-Replications.Orig.
-</th>
-<th style="text-align:right;">
-Replications.Synth.
-</th>
-<th style="text-align:right;">
-Count.Disclosure
-</th>
-<th style="text-align:right;">
-Percentage.Disclosure
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-93
-</td>
-<td style="text-align:right;">
-93
-</td>
-<td style="text-align:right;">
-40
-</td>
-<td style="text-align:right;">
-4
+<td style="text-align:left;">
+7 (0.7%)
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="perceived-disclosure-risk" class="section level2">
-<h2>Perceived Disclosure Risk</h2>
-<p>Unique records in the synthetical dataset may be mistaken for unique records in the original data. This may lead to disadvantages for the underlying respondent, even if the record of the synthetical record differs significantly to the original record in the confidential variable. The perceived risk is measured by matching the unique records among the datasets based on the identifying variables, e.g. sex, age, adress. We applied the method replicated.uniques of the synthpop-R-package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matchings is preferred to minimize the perceived disclosure risk.</p>
-<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<div id="perceived-disclosure-risk-r-package-synthpop" class="section level2">
+<h2>Perceived Disclosure Risk (R-Package: synthpop)</h2>
+<p>Unique records in the synthetic dataset may be <strong>mistaken for unique records</strong> based on the fact, that <strong>only the identifying variables match</strong>. This can lead to problems, even if the associated confidential variables significantly differ from the original record. E.g. people might assume a certain income for a person, because they believe to have identified him from the identifying variables. Even if his real income <strong>is not leaked</strong> (as the confidential variables are different), this assumed (but wrong) information about him <strong>might lead to disadvantages</strong>. The <strong>perceived risk</strong> is measured by matching the unique records among the identifying variables, in our case <code>sex</code>, <code>sat_v</code>, <code>sat_m</code>and <code>sat_sum</code>. We applied the method <code>replicated.uniques</code> of the synthpop package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matches (referred to as Number Replications) is preferred to minimize the perceived disclosure risk.</p>
+<p>These are the results variables for perceived disclosure risk:</p>
+<ul>
+<li><p><strong>Number Uniques</strong> | Number of unique individuals in the original data set.</p></li>
+<li><p><strong>Number Replications</strong> | The number of matching records in the synthetic data set (based only on identifying variables). This is the number of individuals, which might perceived as disclosed (real disclosures would also count into this metric)</p></li>
+<li><p><strong>Percentage Replications</strong> | The calculated percentage of duplicates in the synthetic data</p></li>
+</ul>
+<p>For our selected best parametrized solution in this method-category, we got the following results:</p>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -300,7 +206,7 @@ Perceived Risk
 </div>
 <div id="utility-evaluation" class="section level1">
 <h1>Utility Evaluation</h1>
-<p>Different utility measuers are applied in this section. These utilita measures are the basis of the utility evaluation of the generated synthetic dataset.</p>
+<p>Different utility measures are applied in this section. These utility measures are the basis of the utility evaluation of the generated synthetic dataset. These are the utility measures for our selected dataset after optimizations and tuning.</p>
 <div id="graphical-comparison-for-margins-r-package-synthpop" class="section level3">
 <h3>Graphical Comparison for Margins (R-Package: synthpop)</h3>
 <p>The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.</p>
@@ -334,8 +240,12 @@ Mean_KS_not_signif
 <div id="mahalanobis-distance-for-regression-parameters" class="section level3">
 <h3>Mahalanobis Distance for Regression Parameters</h3>
 <p>To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>cio<span class="sc">$</span>mhd_05</span></code></pre></div>
-<pre><code>## NULL</code></pre>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="distributional-comparison-of-synthesised-data-r-package-synthpop-by-s_pmse" class="section level3">
 <h3>Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE</h3>
@@ -703,14 +613,69 @@ df
 <div id="information-loss-measure-proposed-by-andrzej-mlodak-r-package-sdcmicro" class="section level3">
 <h3>Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)</h3>
 <p>The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.</p>
-<pre><code>## [1] 0.6254697
-## attr(,&quot;indiv_distances&quot;)
-##       sex     sat_v     sat_m   sat_sum    hs_gpa    fy_gpa 
-## 0.4790000 0.8378600 0.8433546 0.8951682 0.3124193 0.3850162 
-## attr(,&quot;n&quot;)
-## [1] 1000
-## attr(,&quot;class&quot;)
-## [1] &quot;il_variables&quot;</code></pre>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Information.Loss
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.6254697
+</td>
+</tr>
+</tbody>
+</table>
+Individual Distances for Information Loss:
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+sex
+</th>
+<th style="text-align:right;">
+sat_v
+</th>
+<th style="text-align:right;">
+sat_m
+</th>
+<th style="text-align:right;">
+sat_sum
+</th>
+<th style="text-align:right;">
+hs_gpa
+</th>
+<th style="text-align:right;">
+fy_gpa
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.479
+</td>
+<td style="text-align:right;">
+0.83786
+</td>
+<td style="text-align:right;">
+0.8433546
+</td>
+<td style="text-align:right;">
+0.8951682
+</td>
+<td style="text-align:right;">
+0.3124193
+</td>
+<td style="text-align:right;">
+0.3850162
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="tuning-and-optimizations" class="section level1">
