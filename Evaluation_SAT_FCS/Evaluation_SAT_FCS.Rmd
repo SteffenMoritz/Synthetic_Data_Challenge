@@ -2,7 +2,7 @@
 title: SATGPA - Fully Conditional Specification (FCS)
 subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
-date: January 28, 2022
+date: January 31, 2022
 output:
   prettydoc::html_pretty:
     theme: architect
@@ -33,13 +33,9 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_sat_fcs_cart)
 ```
 # Executive Summary
+We applied **Fully Conditional Specification** (FCS) on the **SAT** dataset via the **synthpop** package. We tried several algorithm and parameter options, our final FCS model was with **CART**. FCS seemed to us like a very interesting option for certain use cases. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) FCS produced the **best usability** results for **SAT**. Of course by providing good usability there is usually a **trade-off** with the privacy measures. Only **IPSO** was behind **FCS** in our main privacy metrics. However, overall the privacy measures were still acceptable for some use cases.
 
-According to our utility measures, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak's information loss criterion. Overall, we see satisfying results regarding the utility measures.
-
-
-
-
-Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+According to our utility measures, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak's information loss criterion. Overall, we see very satisfying results regarding the utility measures.
 
 **USE CASE RECOMMENDATIONS**
 
@@ -53,6 +49,7 @@ kbl(use) %>%
 
 ```
 
+Since the usability results were clearly the best, FCS is interesting for every use case that requires high usability.  Because of the trade-off with privacy we probably would only supply the FCS synthetic data to trusted partners. So **Testing Analysis**, where trusted researchers can develop and test their models before clearance for the actual microdata seems like a very good fit. **Realeasing to Public** and **Education** mostly wouldn't fit because of privacy issues. Internal **Technology Testing** could be a possible use case, but for most of these testing cases there are probably easier options requiring less computational power to provide synthetic data.
 
 
 # Dataset Considerations
@@ -284,3 +281,5 @@ kbl(data.frame(as.list(temp))) %>%
 
 
 # Tuning and Optimizations
+
+We tested different inputs for the parameter **method**, that enables to specify the algorithm used for synthesising (we sticked with CART in the end). In general, there are plenty of possible optimizations e.g. to the **visit.sequence** and a lot of other parameters (which we have not had time to optimize for). Most things we quickly tested (beyond the **method**) seemed like they did not have too much of an impact.
