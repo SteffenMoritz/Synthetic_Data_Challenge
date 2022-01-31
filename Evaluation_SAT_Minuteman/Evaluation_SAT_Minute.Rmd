@@ -35,7 +35,7 @@ synthetic <- as.data.frame(sm_sat_minuteman)
 # Executive Summary
 
 
-The Minuteman method could not produce useful synthetic data based on SAT in our case. There is barely any measure that would indicate a high utility. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the S_pMSE for tables and for distributions is still adequate. There is no reasonable utility according to Mlodak's information loss criterion.
+The Minuteman method could not produce useful synthetic data based on SAT in our case. There is barely any measure that would indicate a high utility. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the S_pMSE for tables and for distributions do not indicate substantial quality. There is no reasonable utility according to Mlodak's information loss criterion.
 
 
 
