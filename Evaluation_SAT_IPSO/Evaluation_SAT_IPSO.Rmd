@@ -33,12 +33,8 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_ipso_regsdc_conf_hs_fy)
 ```
 # Executive Summary
-We used IPSO with the **RegSDC** R package. Just looking at our main privacy and usability metrics, IPSO di not perform too well. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) it seems like IPSO is clearly the worst. While in most cases the other algorithms tend to be on the pareto front in terms of utility / privacy trade-off, IPSO just seems to have overall bad results. But, taking a closer look, that also has to do with the fact that our main metrics are not very good at evaluating IPSO. The reader should be aware, that only a part of the IPSO dataset is actually synthetic. This fact should be weighted in an evaluation of this algorithm. For the right use case IPSO might be a good choice. The S_pMSE for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is also reasonable usability according to Mlodak's information loss criterion.
+We used **IPSO** with the `RegSDC` R package. Just looking at our main privacy and usability metrics, IPSO di not perform too well. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) it seems like IPSO is clearly the worst. While in most cases the other algorithms tend to be on the pareto front in terms of **utility / privacy trade-off**, IPSO just seems to have overall bad results. But, taking a closer look, that also has to do with the fact that our main metrics are not very good at evaluating IPSO. The reader should be aware, that **only a part** of the IPSO dataset is **actually synthetic**. This fact should be weighted in an evaluation of this algorithm. For the right use case IPSO might be a good choice. The `S_pMSE` for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There **is also reasonable usability** according to Mlodak's information loss criterion.
 
-
-
-
-Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
 
 **USE CASE RECOMMENDATIONS**
 
@@ -64,7 +60,7 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 
 
 # Method Considerations
-Similar to the FCS-method, IPSO is **easy to understand and to explain**, since it is based on classic linear regression. For applying IPSO, we chose the R package **RegSDC** that provides a framework containing several versions of the method. We applied classical version of IPSO provided by the function RegSDCipso.
+Similar to the FCS-method, IPSO is **easy to understand and to explain**, since it is based on classic linear regression. For applying IPSO, we chose the R package **RegSDC** that provides a framework containing several versions of the method. We applied classical version of IPSO provided by the function `RegSDCipso`.
 
 IPSO requires to split up the variables in **non-confidential** ones and **confidential** ones. It assumes statistical independence among the non-confidential variables and multivariate normally distributed confidential variables. The assumption is strong, however, for the dataset SAT it is sufficiently met. We classified the sat-related variables and sex as non-confidential and the gpa-related variables as confidential. The computation time for IPSO was among the best of our tested methods.
 

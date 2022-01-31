@@ -12,9 +12,9 @@
 
 <meta name="author" content="Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)" />
 
-<meta name="date" content="2022-01-28" />
+<meta name="date" content="2022-01-31" />
 
-<title>SATGPA - Simulated Data (Complex Approach)</title>
+<title>SATGPA - Simulated Data (multivariate non-normal distribution)</title>
 
 <script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 <script src="data:application/javascript;base64,JChkb2N1bWVudCkucmVhZHkoZnVuY3Rpb24oKXsKICAgIGlmICh0eXBlb2YgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwKCk7CiAgICB9CiAgICBpZiAoJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyKCk7CiAgICB9Cn0pOwo="></script>
@@ -39,10 +39,10 @@
 
 <header>
 <div class="inner">
-<h1 class="title toc-ignore">SATGPA - Simulated Data (Complex Approach)</h1>
+<h1 class="title toc-ignore">SATGPA - Simulated Data (multivariate non-normal distribution)</h1>
 <h2 class="subtitle">Evaluation Synthetic Data Creation</h2>
 <h3 class="author">Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)</h3>
-<h3 class="date">January 28, 2022</h3>
+<h3 class="date">January 31, 2022</h3>
 </div>
 </header>
 
@@ -65,12 +65,43 @@
     <section id="main-content">
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p>According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable “sex” is a quite limited method to generate suitable synthetic data from the SAT dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The S_pMSE for tables and for distributions is ofen in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivaraite normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak’s information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the simpler multivaraite normal distribution. Nevertheless, fitting a non-normal multivariate distribution led to better results than fitting multivariate normal distribution.</p>
-<p>Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:</p>
-<p><strong>Releasing to public: NO </strong></p>
-<p><strong>Testing analysis: LIMITED </strong></p>
-<p><strong>Education: YES </strong></p>
-<p><strong>Testing technology: YES, especially due to simplicity</strong></p>
+<p>We fit two <strong>multivariate non-normal distributions</strong> for each gender and create synthetic data by drawing thereof. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) this method actually scored best in our privacy measures. Of course, utility is not as good as with other methods. This is a relatively <strong>easy and fast approach</strong> which should make it interesting for <strong>testing technology</strong>. According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable “sex” is a quite <strong>limited method</strong> to generate suitable synthetic data from the <code>SAT</code> dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The <code>S_pMSE</code> for tables and for distributions is often in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivariate normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak’s information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the <strong>simpler multivariate normal distribution</strong>. Nevertheless, fitting a non-normal multivariate distribution led to better results than fitting multivariate normal distribution.</p>
+<p><strong>USE CASE RECOMMENDATIONS</strong></p>
+<table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Releasing_to_Public
+</th>
+<th style="text-align:left;">
+Testing_Analysis
+</th>
+<th style="text-align:left;">
+Education
+</th>
+<th style="text-align:left;">
+Testing_Technology
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+NO
+</td>
+<td style="text-align:left;">
+NO
+</td>
+<td style="text-align:left;">
+YES
+</td>
+<td style="text-align:left;">
+YES
+</td>
+</tr>
+</tbody>
+</table>
+<p>Since it is a rather simple and fast approach with very good privacy measures, <strong>testing technology</strong> is the prime use case for these simulations (at least based on the SAT dataset). Since the privacy is good, usage in education could also be possible. <strong>Releasing to the public</strong> and <strong>testing analysis</strong> wouldn’t be a good fit, since in our opinion the dataset doesn’t have the required utility.</p>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>
@@ -80,7 +111,7 @@
 </div>
 <div id="method-considerations" class="section level1">
 <h1>Method Considerations</h1>
-<p>We fit two multivariate non-normal distributions for each gender and create synthetic data by drawing thereof. This is a relatively easy and fast approach which should make it interesting for testing technology. Of course, the low number of parameters leads to an expectation of limited use regarding testing analysis and providing datasets to the public. Because of the low number of parameters, a low disclosure risk can be expected. Here, skewness and kurtosis of the distributions are taken into account. The variable “sat_sum” was calculated by the sum of “sat_v” and “sat_m”.</p>
+<p>We fit two multivariate non-normal distributions for each gender and create synthetic data by drawing thereof. This is a relatively <strong>easy and fast approach</strong> which should make it interesting for <strong>testing technology</strong>. Of course, the low number of parameters leads to an expectation of <strong>limited use</strong> regarding testing analysis and providing datasets to the public. Because of the low number of parameters, a <strong>low disclosure risk</strong> can be expected. Here, skewness and kurtosis of the distributions are taken into account. The variable <code>sat_sum</code> was calculated by the sum of <code>sat_v</code> and <code>sat_m</code>.</p>
 </div>
 <div id="privacy-and-risk-evaluation" class="section level1">
 <h1>Privacy and Risk Evaluation</h1>

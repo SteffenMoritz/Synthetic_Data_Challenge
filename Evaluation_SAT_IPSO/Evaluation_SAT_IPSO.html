@@ -55,7 +55,6 @@
 <li><a href="#method-considerations">Method Considerations</a></li>
 <li><a href="#privacy-and-risk-evaluation">Privacy and Risk Evaluation</a></li>
 <li><a href="#utility-evaluation">Utility Evaluation</a></li>
-<li><a href="#tuning-and-optimizations">Tuning and Optimizations</a></li>
 </ul>
 </div>
 </div>
@@ -65,11 +64,7 @@
     <section id="main-content">
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p><em>According to our results FCS is only partially useful for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.</em></p>
-<p><em>The method you used</em> <em>Whether or not you used any specific tooling to generate your synthetic data</em></p>
-<p><em>How you evaluated your data (specify any specific measures and their results).</em></p>
-<p><em>Created both a fully synthetic and a partially synthetic file</em> <em>Evidence of tuning</em></p>
-<p>According to our utility measures, simulated data using the IPSO approach is a very suitable way to generate synthetic data from the SAT dataset. But the reader should be aware, that only a part of this dataset is synthetic. Hence, a high utility should not be surprising. The S_pMSE for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is also reasonable usability according to Mlodak’s information loss criterion.</p>
+<p>We used <strong>IPSO</strong> with the <code>RegSDC</code> R package. Just looking at our main privacy and usability metrics, IPSO di not perform too well. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) it seems like IPSO is clearly the worst. While in most cases the other algorithms tend to be on the pareto front in terms of <strong>utility / privacy trade-off</strong>, IPSO just seems to have overall bad results. But, taking a closer look, that also has to do with the fact that our main metrics are not very good at evaluating IPSO. The reader should be aware, that <strong>only a part</strong> of the IPSO dataset is <strong>actually synthetic</strong>. This fact should be weighted in an evaluation of this algorithm. For the right use case IPSO might be a good choice. The <code>S_pMSE</code> for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There <strong>is also reasonable usability</strong> according to Mlodak’s information loss criterion.</p>
 <p>Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:</p>
 <p><strong>USE CASE RECOMMENDATIONS</strong></p>
 <table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
@@ -95,17 +90,18 @@ Testing_Technology
 NO
 </td>
 <td style="text-align:left;">
-NO
-</td>
-<td style="text-align:left;">
-NO
-</td>
-<td style="text-align:left;">
 MAYBE
+</td>
+<td style="text-align:left;">
+NO
+</td>
+<td style="text-align:left;">
+NO
 </td>
 </tr>
 </tbody>
 </table>
+<p>Since IPSO did not score too well on our privacy metrics, we would only release the synthetic data to trusted partners. Thus, <strong>education</strong> and <strong>releasing to the public</strong> does not seem like a good option for us. We also think there are better options for <strong>technology testing</strong>,. We could imagine <strong>testing analysis</strong> could be a good fit, if the choice of <strong>confidetial</strong> and <strong>non-confidential</strong> is a good fit for the analysis planned by the researchers.</p>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>
@@ -115,9 +111,8 @@ MAYBE
 </div>
 <div id="method-considerations" class="section level1">
 <h1>Method Considerations</h1>
-<p>Similar to the FCS-method, IPSO is easy to understand and to explain, since it is based on classic linear regression. For applying IPSO, we chose the R package RegSDC that provides a framework containing several versions of the method. We applied classical version of IPSO provided by the function RegSDCipso.</p>
-<p>IPSO requires to split up the variables in non-confidential ones and confidential ones. It assumes statistical independence among the non-confidential variables and multivariate normally distributed confidential variables. The assumption is strong, however, for the dataset SAT it is sufficiently met. We classified the sat-related variables and sex as non-confidential and the gpa-related variables as confidential.</p>
-<p>The computation time for IPSO was superb and the results were promising, therefore, there was no strong need for parameter tuning.</p>
+<p>Similar to the FCS-method, IPSO is <strong>easy to understand and to explain</strong>, since it is based on classic linear regression. For applying IPSO, we chose the R package <strong>RegSDC</strong> that provides a framework containing several versions of the method. We applied classical version of IPSO provided by the function RegSDCipso.</p>
+<p>IPSO requires to split up the variables in <strong>non-confidential</strong> ones and <strong>confidential</strong> ones. It assumes statistical independence among the non-confidential variables and multivariate normally distributed confidential variables. The assumption is strong, however, for the dataset SAT it is sufficiently met. We classified the sat-related variables and sex as non-confidential and the gpa-related variables as confidential. The computation time for IPSO was among the best of our tested methods.</p>
 </div>
 <div id="privacy-and-risk-evaluation" class="section level1">
 <h1>Privacy and Risk Evaluation</h1>
@@ -688,9 +683,6 @@ fy_gpa
 </tbody>
 </table>
 </div>
-</div>
-<div id="tuning-and-optimizations" class="section level1">
-<h1>Tuning and Optimizations</h1>
 </div>
     </section>
   </div>

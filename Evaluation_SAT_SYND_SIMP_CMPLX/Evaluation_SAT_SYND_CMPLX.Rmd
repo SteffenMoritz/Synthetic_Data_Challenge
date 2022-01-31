@@ -1,8 +1,8 @@
 ---
-title: SATGPA - Simulated Data (Complex Approach)
+title: SATGPA - Simulated Data (multivariate non-normal distribution)
 subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
-date: January 28, 2022
+date: January 31, 2022
 output:
   prettydoc::html_pretty:
     theme: architect
@@ -34,22 +34,23 @@ syn_sat_mnorm_complex <- syn_sat_mnorm_complex.RData
 synthetic <- as.data.frame(syn_sat_mnorm_complex)
 ```
 # Executive Summary
-
-According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable "sex" is a quite limited method to generate suitable synthetic data from the SAT dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The S_pMSE for tables and for distributions is ofen in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivaraite normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak's information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the simpler multivaraite normal distribution.
+We fit two **multivariate non-normal distributions** for each gender and create synthetic data by drawing thereof. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) this method actually scored best in our privacy measures. Of course, utility is not as good as with other methods. This is a relatively **easy and fast approach** which should make it interesting for **testing technology**. According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable "sex" is a quite **limited method** to generate suitable synthetic data from the `SAT` dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The `S_pMSE` for tables and for distributions is often in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivariate normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak's information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the **simpler multivariate normal distribution**.
 Nevertheless, fitting a non-normal multivariate distribution led to better results than fitting multivariate normal distribution. 
 
 
+**USE CASE RECOMMENDATIONS**
 
+```{r , echo=FALSE, warning = FALSE, message= FALSE}
+use <- data.frame("Releasing_to_Public"  = "NO",
+                  "Testing_Analysis" = "NO",
+                  "Education" = "YES",
+                   "Testing_Technology" = "YES")
+kbl(use) %>%
+    kable_classic("striped", full_width = T) #%>%  row_spec(0, bold = TRUE, italic = TRUE) %>% 
 
-Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+```
 
-**Releasing to public: NO ** 
-
-**Testing analysis: LIMITED **
-
-**Education: YES **
-
-**Testing technology: YES, especially due to simplicity**
+Since it is a rather simple and fast approach with very good privacy measures, **testing technology** is the prime use case for these simulations (at least based on the SAT dataset). Since the privacy is good, usage in education could also be possible. **Releasing to the public** and **testing analysis** wouldn't be a good fit, since in our opinion the dataset doesn't have the required utility.
 
 
 
@@ -62,8 +63,8 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 
 
 # Method Considerations
-We fit two multivariate non-normal distributions for each gender and create synthetic data by drawing thereof. This is a relatively easy and fast approach which should make it interesting for testing technology. Of course, the low number of parameters leads to an expectation of limited use regarding testing analysis and providing datasets to the public. Because of the low number of parameters, a low disclosure risk can be expected. Here, skewness and kurtosis of the distributions are taken into account.
-The variable "sat_sum" was calculated by the sum of "sat_v" and "sat_m".
+We fit two multivariate non-normal distributions for each gender and create synthetic data by drawing thereof. This is a relatively **easy and fast approach** which should make it interesting for **testing technology**. Of course, the low number of parameters leads to an expectation of **limited use** regarding testing analysis and providing datasets to the public. Because of the low number of parameters, a **low disclosure risk** can be expected. Here, skewness and kurtosis of the distributions are taken into account.
+The variable `sat_sum` was calculated by the sum of `sat_v` and `sat_m`.
 
 # Privacy and Risk Evaluation
 ### Disclosure Risk (R-Package: synthpop with own Improvements)

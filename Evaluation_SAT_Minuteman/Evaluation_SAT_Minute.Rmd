@@ -33,7 +33,7 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_sat_minuteman)
 ```
 # Executive Summary
-We used minutemen from the python scripts.As you could expect from the second place submission of 2021 NIST differential privacy, minutemen scored good in our main privacy metrics. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) together with the Simulation it was the best method in terms of privacy. The utility measures Unfortunately, Minuteman method could not produce useful synthetic data based on SAT in our case. There is barely any measure that would indicate a high utility. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the S_pMSE for tables and for distributions do not indicate substantial quality. There is no reasonable utility according to Mlodak's information loss criterion.
+We used **minutemen** from the provided python scripts. As you could expect from the **second place submission** of 2021 NIST differential privacy, minutemen scored good in our main privacy metrics. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) together with the simulation approach it was the **best method in terms of privacy**.  Unfortunately, the minuteman method could not produce useful synthetic data based on SAT in our case. There is **barely any measure that would indicate a high utility**. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the `S_pMSE` for tables and for distributions do not indicate substantial quality. There is **no reasonable utility** according to Mlodak's information loss criterion.
 
 
 **USE CASE RECOMMENDATIONS**
