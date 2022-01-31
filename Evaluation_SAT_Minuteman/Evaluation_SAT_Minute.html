@@ -12,9 +12,9 @@
 
 <meta name="author" content="Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)" />
 
-<meta name="date" content="2022-01-28" />
+<meta name="date" content="2022-01-31" />
 
-<title>ACS - Probabilistic Graphical Models (Minutemen DP-pgm)</title>
+<title>SATGPA - Probabilistic Graphical Models (Minutemen DP-pgm)</title>
 
 <script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 <script src="data:application/javascript;base64,JChkb2N1bWVudCkucmVhZHkoZnVuY3Rpb24oKXsKICAgIGlmICh0eXBlb2YgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwKCk7CiAgICB9CiAgICBpZiAoJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyKCk7CiAgICB9Cn0pOwo="></script>
@@ -39,10 +39,10 @@
 
 <header>
 <div class="inner">
-<h1 class="title toc-ignore">ACS - Probabilistic Graphical Models (Minutemen DP-pgm)</h1>
+<h1 class="title toc-ignore">SATGPA - Probabilistic Graphical Models (Minutemen DP-pgm)</h1>
 <h2 class="subtitle">Evaluation Synthetic Data Creation</h2>
 <h3 class="author">Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)</h3>
-<h3 class="date">January 28, 2022</h3>
+<h3 class="date">January 31, 2022</h3>
 </div>
 </header>
 
@@ -64,7 +64,7 @@
     <section id="main-content">
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p>We used <strong>minutemen</strong> from the provided python scripts. As you could expect from the <strong>second place submission</strong> of 2021 NIST differential privacy, minutemen scored good in our main privacy metrics. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) together with the simulation approach it was the <strong>best method in terms of privacy</strong>. Unfortunately, the minuteman method could not produce useful synthetic data based on SAT in our case. There is <strong>barely any measure that would indicate a high utility</strong>. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the <code>S_pMSE</code> for tables and for distributions do not indicate substantial quality. There is <strong>no reasonable utility</strong> according to Mlodak’s information loss criterion.</p>
+<p>We tested <strong>minutemen</strong> method using the available python scripts. As you could expect from a <strong>second place submission</strong> of the 2021 NIST differential privacy challenge, minutemen scored quite well for our main privacy metrics. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) minutemen was (together with the simulation approach) the <strong>best method in terms of privacy</strong>. Unfortunately, the minuteman method could not produce useful synthetic data based on SAT in our case. There is <strong>barely any measure that would indicate a high utility</strong>. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the <code>S_pMSE</code> for tables and for distributions do not indicate substantial quality. There is <strong>no reasonable utility</strong> according to Mlodak’s information loss criterion.</p>
 <p><strong>USE CASE RECOMMENDATIONS</strong></p>
 <table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <thead>
@@ -100,7 +100,7 @@ MAYBE
 </tr>
 </tbody>
 </table>
-<p>For our SAT experiment, would not recommend <strong>releasing data to the public</strong> that was created by minutemen. Since the sythetic dataset would not reproduce correlations and distributions in a sufficient way, this could lead to confusion. The same is true for <strong>testing analysis</strong>. We could imagine undergrad students playing around with the data to improve their data science skills. Thus, since the privacy risk is low, <strong>education</strong> might be a suitable use case. Also <strong>testing technology</strong> might be feasable, but probably there are faster and more uncomplicated options for this use case.</p>
+<p>Based an our synthetic SAT dataset, we would not recommend minuteman for the use case <strong>releasing to the public</strong>. The synthetic dataset does not reproduce correlations and distributions in a sufficient way, which could lead to misunderstandings. The same is true for <strong>testing analysis</strong>. What we can imagine is undergrad students playing around with the data to improve their data science skills. Thus, since the privacy risk is low <strong>education</strong> might be a suitable use case. Also <strong>testing technology</strong> might be feasible, but there are faster and less complicated options for this use case available.</p>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>

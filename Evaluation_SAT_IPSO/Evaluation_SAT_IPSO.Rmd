@@ -2,7 +2,7 @@
 title: SATGPA - Information Preserving Statistical Obfuscation (IPSO)
 subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
-date: January 28, 2022
+date: January 31, 2022
 output:
   prettydoc::html_pretty:
     theme: architect
@@ -33,7 +33,7 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_ipso_regsdc_conf_hs_fy)
 ```
 # Executive Summary
-We used **IPSO** with the `RegSDC` R package. Just looking at our main privacy and usability metrics, IPSO di not perform too well. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) it seems like IPSO is clearly the worst. While in most cases the other algorithms tend to be on the pareto front in terms of **utility / privacy trade-off**, IPSO just seems to have overall bad results. But, taking a closer look, that also has to do with the fact that our main metrics are not very good at evaluating IPSO. The reader should be aware, that **only a part** of the IPSO dataset is **actually synthetic**. This fact should be weighted in an evaluation of this algorithm. For the right use case IPSO might be a good choice. The `S_pMSE` for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There **is also reasonable usability** according to Mlodak's information loss criterion.
+We used **IPSO** with the `RegSDC` R package. Just looking at our main privacy and usability metrics, IPSO did not perform too well. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) it seems like IPSO is clearly the worst. While in most cases the other algorithms tend to be on the pareto front in terms of **utility / privacy trade-off**, IPSO just seems to have overall bad results. But, taking a closer look, that also has to do with the fact that our main metrics are not very good at evaluating IPSO. The reader should be aware, that **only a part** of the IPSO dataset is **actually synthetic**. This fact should be weighted in an evaluation of this algorithm. For the right use case IPSO might be a good choice. The `S_pMSE` for tables and for distributions is usually below 10 for the synthetic part. The Mahalanobis distance of the regression parameters never exceeded the critical value. There **is also reasonable usability** according to Mlodak's information loss criterion.
 
 
 **USE CASE RECOMMENDATIONS**
@@ -48,7 +48,7 @@ kbl(use) %>%
 
 ```
 
-Since IPSO did not score too well on our privacy metrics, we would only release the synthetic data to trusted partners. Thus, **education** and **releasing to the public** does not seem like a good option for us. We also think there are better options for **technology testing**,. We could imagine **testing analysis** could be a good fit, if the choice of **confidetial** and **non-confidential** is a good fit for the analysis planned by the researchers.
+Since IPSO did not score too well on our privacy metrics, we would only release the synthetic data to trusted partners. Thus, **education** and **releasing to the public** does not seem like a good option for us. We also think there are better options for **technology testing**,. We think **testing analysis** could be a good fit, if the choice of **confidetial** and **non-confidential** is a good fit for the analysis planned by the researchers.
 
 # Dataset Considerations
 When deciding, if data is released to the public it is of utmost importance to define, **which variables** are the **most relevant** in terms of **privacy and utility**. This process is very **domain and country specific**, since different areas of the world have different privacy legislation and feature specific overall circumstances. This step would require input and discussions with actual domain experts. Since we are foreign to US privacy law and there is no SAT equivalent in Germany, the assumptions made for the Synthetic Data Challenge are basically a **educated guess** from our side.

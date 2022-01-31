@@ -1,8 +1,8 @@
 ---
-title: ACS - Probabilistic Graphical Models (Minutemen DP-pgm)
+title: SATGPA - Probabilistic Graphical Models (Minutemen DP-pgm)
 subtitle: Evaluation Synthetic Data Creation 
 author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
-date: January 28, 2022
+date: January 31, 2022
 output:
   prettydoc::html_pretty:
     theme: architect
@@ -33,7 +33,7 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_sat_minuteman)
 ```
 # Executive Summary
-We used **minutemen** from the provided python scripts. As you could expect from the **second place submission** of 2021 NIST differential privacy, minutemen scored good in our main privacy metrics. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) together with the simulation approach it was the **best method in terms of privacy**.  Unfortunately, the minuteman method could not produce useful synthetic data based on SAT in our case. There is **barely any measure that would indicate a high utility**. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the `S_pMSE` for tables and for distributions do not indicate substantial quality. There is **no reasonable utility** according to Mlodak's information loss criterion.
+We tested **minutemen** method using the available python scripts. As you could expect from a **second place submission** of the 2021 NIST differential privacy challenge, minutemen scored quite well for our main privacy metrics. Out of all different methods we tested (`FCS`, `IPSO`, `GAN`, `Simulation`, `Minutemen`) minutemen was (together with the simulation approach) the **best method in terms of privacy**.  Unfortunately, the minuteman method could not produce useful synthetic data based on SAT in our case. There is **barely any measure that would indicate a high utility**. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the `S_pMSE` for tables and for distributions do not indicate substantial quality. There is **no reasonable utility** according to Mlodak's information loss criterion.
 
 
 **USE CASE RECOMMENDATIONS**
@@ -47,7 +47,7 @@ kbl(use) %>%
     kable_classic("striped", full_width = T) #%>%  row_spec(0, bold = TRUE, italic = TRUE) %>% 
 
 ```
-For our SAT experiment, would not recommend **releasing data to the public** that was created by minutemen. Since the sythetic dataset would not reproduce correlations and distributions in a sufficient way, this could lead to confusion. The same is true for **testing analysis**. We could imagine undergrad students playing around with the data to improve their data science skills. Thus, since the privacy risk is low, **education** might be a suitable use case. Also **testing technology** might be feasable, but probably there are faster and more uncomplicated options for this use case.
+Based an our synthetic SAT dataset, we would not recommend minuteman for the use case **releasing to the public**. The synthetic dataset does not reproduce correlations and distributions in a sufficient way, which could lead to misunderstandings. The same is true for **testing analysis**. What we can imagine is undergrad students playing around with the data to improve their data science skills. Thus, since the privacy risk is low **education** might be a suitable use case. Also **testing technology** might be feasible, but there are faster and less complicated options for this use case available.
 
 
 # Dataset Considerations

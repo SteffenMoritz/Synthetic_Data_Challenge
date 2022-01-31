@@ -12,7 +12,7 @@
 
 <meta name="author" content="Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)" />
 
-<meta name="date" content="2022-01-28" />
+<meta name="date" content="2022-01-31" />
 
 <title>SATGPA - Generative Adversarial Network (GAN)</title>
 
@@ -135,7 +135,7 @@ a.sourceLine {
 <h1 class="title toc-ignore">SATGPA - Generative Adversarial Network (GAN)</h1>
 <h2 class="subtitle">Evaluation Synthetic Data Creation</h2>
 <h3 class="author">Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)</h3>
-<h3 class="date">January 28, 2022</h3>
+<h3 class="date">January 31, 2022</h3>
 </div>
 </header>
 
@@ -158,7 +158,7 @@ a.sourceLine {
     <section id="main-content">
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p>We used mainly the <code>sdv</code> python libraries to employ GANs. We specifically used the <code>ctgan</code> (Conditional GAN) and <code>CopulaGAN</code> implementations. We also tested the R package <code>ganGenerativeData</code>. The GAN algorithms required quite a lot of computing power, which is a clear downside. From our main metrics the final GAN result seemed like a good trade-off between utility and privacy. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) it was ranked second for utility and third privacy. But looking deeper into more utility measures weakens this first impression. Only one variable has a similar distribution as its original according to the Kolmologorov-Smirnov test. The <code>S_pMSE</code> for tables and for distributions is still very high. The Mahalanobis distance of the regression parameters <strong>always exceeds the critical value</strong>. There is <strong>no reasonable usability</strong> according to Mlodak’s information loss criterion. From a privacy perspective the GAN looks quite good (also when looking at more detailed metrics). From our perspective it seemed like the GAN algorithms tend to extrapolate more than other algorithms like FCS.</p>
+<p>We used mainly the <code>sdv</code> python libraries to employ GANs. We specifically used the <code>ctgan</code> (Conditional GAN) and <code>CopulaGAN</code> implementations. We also tested the R package <code>ganGenerativeData</code>. The GAN algorithms required quite a lot of computing power, which is a clear downside. From our main metrics the final GAN result seemed like a good trade-off between utility and privacy. Out of all different methods we tested (<code>FCS</code>, <code>IPSO</code>, <code>GAN</code>, <code>Simulation</code>, <code>Minutemen</code>) it was ranked second for utility and third privacy. But, a closer look into more utility measures weakens this first impression. Only one variable has a similar distribution as its original according to the Kolmologorov-Smirnov test. The <code>S_pMSE</code> for tables and for distributions is still very high. The Mahalanobis distance of the regression parameters <strong>always exceeds the critical value</strong>. There is <strong>no reasonable usability</strong> according to Mlodak’s information loss criterion. From a privacy perspective the GAN looks quite good (also when looking at more detailed metrics). From our perspective it seemed like the GAN algorithms tend to extrapolate more than other algorithms (e.g. FCS).</p>
 <p><strong>USE CASE RECOMMENDATIONS</strong></p>
 <table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <thead>
@@ -194,7 +194,7 @@ YES
 </tr>
 </tbody>
 </table>
-<p>The utility of <strong>GAN</strong> has some flaws, thus we <strong>don’t</strong> think it is a good idea to <strong>release this data to the public</strong>. This could lead to false impressions. Also scientists may be led to false conclusions when using this data for <strong>testing analysis</strong>. We could imagine GAN generated data in <strong>education</strong> or in <strong>technology testing</strong>. On first sight it seems like GAN data is somehow to computationally intensive to consider ist for testing, but we also see an advantage in the fact, that they tend a little more to extrapolate, what could be beneficial for testing.</p>
+<p>The utility of <strong>GAN</strong> has some flaws, thus we <strong>don’t</strong> think it is a good idea to <strong>release this data to the public</strong>. Also scientists may be led to false conclusions when using this data for <strong>testing analysis</strong>. We can imagine GAN generated data in <strong>education</strong> or in <strong>technology testing</strong>. On first sight it seems like GAN data is somehow to computationally intensive to consider it for testing, but we also see an advantage in the fact, that they tend to extrapolate a little more. This could be beneficial for testing.</p>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>
