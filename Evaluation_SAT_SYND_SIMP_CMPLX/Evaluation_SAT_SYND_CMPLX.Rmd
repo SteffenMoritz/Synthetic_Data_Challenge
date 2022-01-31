@@ -34,19 +34,9 @@ syn_sat_mnorm_complex <- syn_sat_mnorm_complex.RData
 synthetic <- as.data.frame(syn_sat_mnorm_complex)
 ```
 # Executive Summary
-*According to our results FCS is only partially useful for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.*
-
-
-*The method you used*
-*Whether or not you used any specific tooling to generate your synthetic data*
-
-*How you evaluated your data (specify any specific measures and their results).*
-
-*Created both a fully synthetic and a partially synthetic file*
-*Evidence of tuning*
-
 
 According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable "sex" is a quite limited method to generate suitable synthetic data from the SAT dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The S_pMSE for tables and for distributions is ofen in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivaraite normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak's information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the simpler multivaraite normal distribution.
+Nevertheless, fitting a non-normal multivariate distribution led to better results than fitting multivariate normal distribution. 
 
 
 
@@ -296,4 +286,121 @@ kbl(data.frame(as.list(temp))) %>%
 
 
 # Tuning and Optimizations
-Addtionally to fitting multivariate non-normal distributions, we tested an approach with multivariate normal distributions. The results are shown in a separate document.
+Addtionally to fitting multivariate non-normal distributions, we tested an approach with multivariate normal distributions. The corresponding results are shown below.
+
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+
+```{r dataset2, include=FALSE}
+# Load Source Dataset
+load(here::here("results/syn_sat_mnorm_simple.RData"))
+load(here::here("results/results_sat2.RData"))
+load(here::here("satgpa.rda"))
+result <- results_syn_sat_mnorm_simple
+original <- as.data.frame(satgpa)
+synthetic <- as.data.frame(syn_sat_mnorm_simple)
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp$plots
+```
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(result$cp1$corr, method = "color", type = "lower")
+corrplot(result$cp2$corr, method = "color", type = "lower")
+```
+
+
+### Kolmogorov-Smirnov Test
+
+The Kolmogorov-Smirnov test is a classic way to compare (marginal) distributions. A significant result indicates that the two distributions are not identical. The following statistic show the share of variables in the synthetic dataset that have a p-value > 5%. (1: 100%, 0: 0%)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(data.frame(Mean_KS_not_signif = round(mean(result$ks > 0.05), 2))) %>%
+  kable_paper(full_width = F) 
+```
+
+
+### Mahalanobis Distance for Regression Parameters
+
+To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor). 
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+mahdist <- data.frame(`Mahalanobis Distance` = result$cio$mhd_05)
+
+kbl(mahdist) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero and the S_pMSE (standardised) should equal one for perfect utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- result$comp$tab.utility
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- data.frame(pMSE = result$ug$pMSE, S_pMSE = result$ug$S_pMSE)
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Two-way tables are evaluated based on the original and the synthetic dataset. Here, tables/cells are also evaluated based on pMSE and S_pMSE (see above). We also present the results for the mean absolute difference in densities (MabsDD).
+
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut$utility.plot
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(result$ut$tabs) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+infloss <- data.frame(`Information Loss` = result$il[1])
+kbl(infloss) %>%
+  kable_paper(full_width = F) 
+```
+
+Individual Distances for Information Loss:
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+temp <- attr(result$il, "indiv_distances")
+
+kbl(data.frame(as.list(temp))) %>%
+  kable_paper(full_width = F) 
+```
