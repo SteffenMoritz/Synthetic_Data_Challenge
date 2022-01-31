@@ -12,7 +12,7 @@
 
 <meta name="author" content="Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)" />
 
-<meta name="date" content="2022-01-28" />
+<meta name="date" content="2022-01-31" />
 
 <title>SATGPA - Fully Conditional Specification (FCS)</title>
 
@@ -42,7 +42,7 @@
 <h1 class="title toc-ignore">SATGPA - Fully Conditional Specification (FCS)</h1>
 <h2 class="subtitle">Evaluation Synthetic Data Creation</h2>
 <h3 class="author">Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)</h3>
-<h3 class="date">January 28, 2022</h3>
+<h3 class="date">January 31, 2022</h3>
 </div>
 </header>
 
@@ -65,12 +65,8 @@
     <section id="main-content">
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p><em>According to our results FCS is only partially useful for the use case xyz with the SAT data. In comparison to methods xza and yzt it lacks utility. Scores for our main metric was xxx compared to xxx. Also for risk it seems like it is not a good idea. As the use case reuqires to have xxx and xxx and also provides full data to . An advantage of the method we see is the easy way to apply and processing speed for huge datasets.</em></p>
-<p><em>The method you used</em> <em>Whether or not you used any specific tooling to generate your synthetic data</em></p>
-<p><em>How you evaluated your data (specify any specific measures and their results).</em></p>
-<p><em>Created both a fully synthetic and a partially synthetic file</em> <em>Evidence of tuning</em></p>
-<p>According to our utility meausres, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak’s information loss criterion. Overall, we see satisfying results regarding the utility measures.</p>
-<p>Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:</p>
+<p>We applied <strong>Fully Conditional Specification</strong> (FCS) on the <strong>SAT</strong> dataset via the <strong>synthpop</strong> package. We tried several algorithm and parameter options, our final FCS model was with <strong>CART</strong>. FCS seemed to us like a very interesting option for certain use cases. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) FCS produced the <strong>best usability</strong> results for <strong>SAT</strong>. Of course by providing good usability there is usually a <strong>trade-off</strong> with the privacy measures. Only <strong>IPSO</strong> was behind <strong>FCS</strong> in our main privacy metrics. However, privacy measures were still acceptable.</p>
+<p>According to our utility measures, FCS is a very suitable method to generate synthetic data from the SAT dataset. At a first glance, the marginal distributions and Pearson correlation coefficients match nearly perfectly. This first impression is underpinned by further metrics. Especially the S_pMSE for tables is often close to one. The S_pMSE shows aceptable results for margins. The share of not significant Kolmolgorov-Smirnov tests is 100%. The Mahalanobis distance of the regression parameters never exceeded the critial value. There is only some limited usability according to Mlodak’s information loss criterion. Overall, we see very satisfying results regarding the utility measures.</p>
 <p><strong>USE CASE RECOMMENDATIONS</strong></p>
 <table class=" lightable-classic lightable-striped" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <thead>
@@ -92,13 +88,13 @@ Testing_Technology
 <tbody>
 <tr>
 <td style="text-align:left;">
-YES
+NO
 </td>
 <td style="text-align:left;">
 YES
 </td>
 <td style="text-align:left;">
-YES
+NO
 </td>
 <td style="text-align:left;">
 MAYBE
@@ -106,6 +102,7 @@ MAYBE
 </tr>
 </tbody>
 </table>
+<p>Since the usability results were clearly the best, FCS is interesting for every use case that requires high usability. Because of the trade-off with privacy we probably would only supply the FCS synthetic data to trusted partners. So <strong>Testing Analysis</strong>, where trusted researchers can develop and test their models before clearance for the actual microdata seems like a very good fit. <strong>Realeasing to Public</strong> and <strong>Education</strong> mostly wouldn’t fit because of privacy issues. Internal <strong>Technology Testing</strong> could be a possible use case, but for most of these testing cases there are probably easier options requiring less computational power to provide synthetic data.</p>
 </div>
 <div id="dataset-considerations" class="section level1">
 <h1>Dataset Considerations</h1>
@@ -115,8 +112,7 @@ MAYBE
 </div>
 <div id="method-considerations" class="section level1">
 <h1>Method Considerations</h1>
-<p>We decided to use the FCS method for multiple reasons. For one the use of the FCS method is fairly simple and straightforward, since no prior knowledge of the relation between the data is necessary. Secondly, the R package “synthpop” already comes with a good implementation of the method. Thirdly, and maybe most importantly, the method can be used for nearly all types of datasets and yield meaningful results.</p>
-<p>For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the Classification and Regression Tree (CART) machine learning model for each variable. For the purpose of this challenge, concerning the small dataset (SAT) this might be sufficient. For real life instances and bigger datasets such as the ACS dataset the method has a huge amount of possible parameter settings that would have to be tested.</p>
+<p>We decided to use the <strong>FCS</strong> method for multiple reasons. For one the use of the FCS method is fairly simple and straightforward, since no prior knowledge of the relation between the data is necessary to fit a first model. Secondly, the R package <strong>synthpop</strong> already comes with a good implementation of the method. Thirdly, and maybe most importantly, the method can be used for nearly all types of datasets and yield meaningful results. For our first approach we chose to use the default settings of the method, i.e. the order of synthesisation of the variables in ascending order, and using the <strong>Classification and Regression Tree</strong> (CART) machine learning model for each variable. We played around with different algorithm settings. In general, we also found the <strong>pmm</strong> algorithm an interesting option, for certain cases when a high plausibility of the created data is important. In the end, we chose to stick with <strong>CART</strong> since it featured the best results.</p>
 </div>
 <div id="privacy-and-risk-evaluation" class="section level1">
 <h1>Privacy and Risk Evaluation</h1>
@@ -680,6 +676,7 @@ fy_gpa
 </div>
 <div id="tuning-and-optimizations" class="section level1">
 <h1>Tuning and Optimizations</h1>
+<p>We tested different inputs for the parameter <strong>method</strong>, that enables to specify the algorithm used for synthesising (we sticked with CART in the end). In general, there are plenty of possible optimizations e.g. to the <strong>visit.sequence</strong> and a lot of other parameters (which we have not had time to optimize for). Most things we quickly tested (beyond the <strong>method</strong>) seemed like they did not have too much of an impact.</p>
 </div>
     </section>
   </div>
