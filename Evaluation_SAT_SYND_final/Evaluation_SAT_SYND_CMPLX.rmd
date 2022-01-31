@@ -1,0 +1,391 @@
+---
+title: SATGPA - Simulated Data (Complex Approach)
+subtitle: Evaluation Synthetic Data Creation 
+author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
+date: January 28, 2022
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+    toc_depth: 1
+# pdf_document:
+#    toc: true
+#    toc_depth: 1
+---
+
+
+
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+library("kableExtra")
+```
+
+```{r dataset, include=FALSE}
+# Load Source Dataset
+load(here::here("results/syn_sat_mnorm_complex.RData"))
+load(here::here("results/results_sat2.RData"))
+load(here::here("satgpa.rda"))
+result <- results_syn_sat_mnorm_complex
+original <- as.data.frame(satgpa)
+syn_sat_mnorm_complex <- syn_sat_mnorm_complex.RData
+synthetic <- as.data.frame(syn_sat_mnorm_complex)
+```
+# Executive Summary
+
+According to our utility measures, simulated data using a multivariate non-normal distribution for each outcomes of the variable "sex" is a quite limited method to generate suitable synthetic data from the SAT dataset. At a first glance, the marginal distributions are similar and the Pearson correlation coefficients are nearly identical. The impression is deteriorated by further metrics. The S_pMSE for tables and for distributions is ofen in the region of 3 but there are also no extreme outcomes. The share of not significant Kolmogorov–Smirnov tests is with 50% lower than in the approach using the multivariate normal distribution. The Mahalanobis distance of the regression parameters never exceeded the critical value. There is a distinct limited usability according to Mlodak's information loss criterion. Overall, we see mediocre results regarding the utility measures and practically no improvement compared to the simpler multivariate normal distribution in the tuning and optimization section.
+
+
+Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+
+**Releasing to public: NO ** 
+
+**Testing analysis: LIMITED **
+
+**Education: YES **
+
+**Testing technology: YES, especially due to simplicity**
+
+
+
+# Dataset Considerations
+When deciding, if data is released to the public it is of utmost importance to define, **which variables** are the **most relevant** in terms of **privacy and utility**. This process is very **domain and country specific**, since different areas of the world have different privacy legislation and feature specific overall circumstances. This step would require input and discussions with actual domain experts. Since we are foreign to US privacy law and there is no SAT equivalent in Germany, the assumptions made for the Synthetic Data Challenge are basically a **educated guess** from our side.
+
+From a **utility perspective** it is important to know which variables and correlations are most interesting for actual users of the created synthetic dataset. Different use cases might require focus on different variables and correlations. We could not single out a most important variable, thus in our utility analysis we decided to focus on the overall SAT utility and **not to prioritize a specific variable**. From a data plausibility perspective it was essential to us, that the `sat_v + sat_m = sat_sum` stay consistent.
+
+From a **privacy perspective** it has to be decided, which variables are **confidential** and which are **identifying**. As already mentioned, specifying this depends on multiple factors e.g. **regulations** or also **other public information**, that could be used for **de-anonymization**. For our analysis, we made the following assumptions: Feature `sex` is an identifying value. For the SAT percentiles (`sat_v`, `sat_m`, `sat_sum`) there can be argued in both directions, but we decided for it to be an identifying variable. The same holds for the grade point average `fy_gpa`. We assumed the grade point average to be more confidential than the SAT results. It is very likely for example that students who passed the SAT exchanged about their grades with their fellow students or that teachers know about the SAT results of their students. So these (older) information potentially can be used to **identify a student** within a dataset and find out about the **(newer) information of grade point average**. The calculus behind this decision is that the older information about a test, that is only used to get the college admission, is **less confidential than the newer information** about actual grades, which might give information about a student's current situation.
+
+
+# Method Considerations
+We fit two multivariate non-normal distributions for each gender and create synthetic data by drawing thereof. This is a relatively easy and fast approach which should make it interesting for testing technology. Of course, the low number of parameters leads to an expectation of limited use regarding testing analysis and providing datasets to the public. Because of the low number of parameters, a low disclosure risk can be expected. Here, skewness and kurtosis of the distributions are taken into account.
+The variable "sat_sum" was calculated by the sum of "sat_v" and "sat_m".
+
+# Privacy and Risk Evaluation
+### Disclosure Risk (R-Package: synthpop with own Improvements)
+Our starting point was the **matching of unique records**, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: `replicated.uniques`. However, one downside of just using `replicated.uniques` is that it does **not consider almost exact matches in numeric variables**. Imagine a data set with information about the respondents’ income. If there is a matching data point in the synthetic data set for a unique person in the original data set, that only differs by a slight margin, the original function would not identify this as a match. **Our solution** is to  borrow the notion of the **p% rule** from **cell suppression methods**, which identifies a data point as critical, if one can guess the original values with **some error of at most p%**. Thus, **our improved risk measure** is  able to evaluate disclosure risk in numeric data.
+Our Uniqueness-Measure for **“almost exact”** matches provides us with the following outputs:
+
+- **Replication Uniques**
+|   Number of unique records in the synthetic data set that replicates unique records in the original data set w.r.t. their quasi-identifying variables. In brackets, the proportion of replicated uniques in the synthetical data set relative to the original data set size is stated.
+
+- **Disclosure in >= 1 CVar**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable, i.e. there is at least one confidential variable where the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
+
+- **Disclosure in 2 CVars**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in both confidential variables, i.e. in both of the confidential variables the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%. In brackets, the described number is given in proportion to the original data set size.
+
+
+For our selected best parametrized solution in this method-category, we got the following results:
+
+
+```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
+library(synthpop)
+library(dplyr)
+
+generate_uniques_for_sat <-function(df_orig, df_synth, exclude = NULL){
+  syn_synth <- list(m = 1, syn = df_synth)
+  replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
+}
+
+generate_uniques_pp_for_sat <-function(df_orig, df_synth,identifiers = 1:4 ,  p = 0.05){
+  syn_synth <- list(m = 1, syn = df_synth[,identifiers])
+  syn_orig <- list(m = 1, syn = df_orig[,identifiers])
+  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])
+  repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
+  df <- inner_join(df_synth[repl_synth$replications,], df_orig[repl_orig,],
+                   by=names(df_orig)[identifiers],
+                   suffix = c("_synth", "_orig"))
+  sum_repl_synth  <- sum(repl_synth$replications)
+  count_disclosure <- df %>%
+    mutate(hs_gpa_discl = abs(hs_gpa_synth-hs_gpa_orig)/abs(hs_gpa_orig)< p,
+           fy_gpa_discl = abs(fy_gpa_synth-fy_gpa_orig)/abs(fy_gpa_orig) < p,
+           at_least_1_discl = hs_gpa_discl | fy_gpa_discl,
+           at_least_2_discl = hs_gpa_discl & fy_gpa_discl) %>%
+    summarize(sum_hs_gpa_discl = sum(hs_gpa_discl),
+              sum_fy_gpa_discl = sum(fy_gpa_discl),
+              sum_at_least_1_discl = sum(at_least_1_discl),
+              sum_at_least_2_discl = sum(at_least_2_discl)) %>%
+    mutate(#hs_gpa_discl = paste0(sum_hs_gpa_discl, " (",round(sum_hs_gpa_discl/sum_repl_synth,4)*100, "%)"),
+           #unique_orig = repl_synth$no.uniques,
+           'Replication.Uniques' = paste0(repl_synth$no.replications, " (",round(repl_synth$no.replications/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.>=1.CVar' = paste0(sum_at_least_1_discl, " (",round(sum_at_least_1_discl/nrow(df_orig),4)*100, "%)"),
+           'Disclosure.in.2.CVars' = paste0(sum_at_least_2_discl, " (",round(sum_at_least_2_discl/nrow(df_orig),4)*100, "%)"),
+           )%>%
+    select('Replication.Uniques' , 'Disclosure.in.>=1.CVar', 'Disclosure.in.2.CVars')
+  count_disclosure
+}
+
+
+synthetic$hs_gpa <- round(synthetic$hs_gpa,2)
+synthetic$fy_gpa <- round(synthetic$fy_gpa,2)
+
+# Disclosure Risk  - own metric
+disclosure_own <- generate_uniques_pp_for_sat(original, synthetic)
+
+
+
+kbl(disclosure_own) %>%
+    kable_classic("striped", full_width = F)
+
+
+```
+
+
+## Perceived Disclosure Risk (R-Package: synthpop)
+Unique records in the synthetic dataset may be **mistaken for unique records**  based on the fact, that 
+**only the identifying variables match**. This can lead to problems, even if the associated confidential variables significantly differ from the original record. E.g. people might assume a certain income for a person, because they believe to have identified him from the identifying variables. Even if his real income **is not leaked** (as the confidential variables are different), this assumed (but wrong) information about him **might lead to disadvantages**. The **perceived risk** is measured by matching the unique records among the identifying variables, in our case `sex`, `sat_v`, `sat_m`and `sat_sum`. We applied the method `replicated.uniques` of the synthpop package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matches (referred to as Number Replications) is preferred to minimize the perceived disclosure risk. 
+
+These are the results variables for perceived disclosure risk:
+
+- **Number Uniques**
+|   Number of unique individuals in the original data set. 
+
+- **Number Replications**
+|   The number of matching records in the synthetic data set (based only on identifying variables). This is the number of individuals, which might perceived as disclosed (real disclosures would also count into this metric)
+
+- **Percentage Replications**
+|   The calculated percentage of duplicates in the synthetic data 
+
+For our selected best parametrized solution in this method-category, we got the following results:
+
+```{r, echo=FALSE, warning = FALSE, message= FALSE}
+
+# Perceived disclosure risk
+disclosure_percei <- generate_uniques_for_sat(original, synthetic, exclude = c("hs_gpa", "fy_gpa") )
+
+
+pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
+                 `Number Uniques` = c(disclosure_percei$no.uniques), 
+                 `Number Replications` = c(disclosure_percei$no.replications),  
+                 `Percentage Replications` = c(disclosure_percei$per.replications)
+                 )
+
+kbl(pp2) %>%
+  kable_classic(full_width = F) 
+```
+
+
+# Utility Evaluation
+
+Different utility measures are applied in this section. These utility measures are the basis of the utility evaluation of the generated synthetic dataset. These are the utility measures for our selected dataset after optimizations and tuning.
+
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp$plots
+```
+
+
+
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(result$cp1$corr, method = "color", type = "lower")
+corrplot(result$cp2$corr, method = "color", type = "lower")
+```
+
+
+
+### Kolmogorov-Smirnov Test
+
+The Kolmogorov-Smirnov test is a classic way to compare (marginal) distributions. A significant result indicates that the two distributions are not identical. The following statistic show the share of variables in the synthetic dataset that have a p-value > 5%. (1: 100%, 0: 0%)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(data.frame(Mean_KS_not_signif = round(mean(result$ks > 0.05), 2))) %>%
+  kable_paper(full_width = F) 
+```
+
+
+### Mahalanobis Distance for Regression Parameters
+
+To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor). 
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+mahdist <- data.frame(`Mahalanobis Distance` = result$cio$mhd_05)
+
+kbl(mahdist) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero. The S_pMSE (standardised pMSE) should not exceed 10 and for a good fit below 3 according to Raab (2021, https://unece.org/sites/default/files/2021-12/SDC2021_Day2_Raab_AD.pdf)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- result$comp$tab.utility
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- data.frame(pMSE = result$ug$pMSE, S_pMSE = result$ug$S_pMSE)
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Two-way tables are evaluated based on the original and the synthetic dataset. Here, tables/cells are also evaluated based on pMSE and S_pMSE (see above). We also present the results for the mean absolute difference in densities (MabsDD).
+
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut$utility.plot
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(result$ut$tabs) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+infloss <- data.frame(`Information Loss` = result$il[1])
+kbl(infloss) %>%
+  kable_paper(full_width = F) 
+```
+
+Individual Distances for Information Loss:
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+temp <- attr(result$il, "indiv_distances")
+
+kbl(data.frame(as.list(temp))) %>%
+  kable_paper(full_width = F) 
+```
+
+
+# Tuning and Optimizations
+Addtionally to fitting multivariate non-normal distributions, we tested an approach with multivariate normal distributions. The corresponding results are shown below in the same order as above.
+
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+```{r dataset2, include=FALSE}
+# Load Source Dataset
+load(here::here("results/syn_sat_mnorm_simple.RData"))
+load(here::here("results/results_sat2.RData"))
+load(here::here("satgpa.rda"))
+result <- results_syn_sat_mnorm_simple
+original <- as.data.frame(satgpa)
+synthetic <- as.data.frame(syn_sat_mnorm_simple)
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp$plots
+```
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(result$cp1$corr, method = "color", type = "lower")
+corrplot(result$cp2$corr, method = "color", type = "lower")
+```
+
+
+### Kolmogorov-Smirnov Test
+
+The Kolmogorov-Smirnov test is a classic way to compare (marginal) distributions. A significant result indicates that the two distributions are not identical. The following statistic show the share of variables in the synthetic dataset that have a p-value > 5%. (1: 100%, 0: 0%)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(data.frame(Mean_KS_not_signif = round(mean(result$ks > 0.05), 2))) %>%
+  kable_paper(full_width = F) 
+```
+
+
+### Mahalanobis Distance for Regression Parameters
+
+To assess testing analysis, coefficients and standard errors calculated based on synthetic dataset should lead to the same results when calculated on the original data. The evaluate differences and taking the variance covariance matrix into account, we calculated the mahalanobis distance between the respective regression parameters. Since we used several regression models, we present the mean of cases in which the mahalanobis distance exceeded the critial value (0: excellent; 1: poor). 
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+mahdist <- data.frame(`Mahalanobis Distance` = result$cio$mhd_05)
+
+kbl(mahdist) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- result$comp$tab.utility
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug <- data.frame(pMSE = result$ug$pMSE, S_pMSE = result$ug$S_pMSE)
+kbl(ug) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+s
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut$utility.plot
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+kbl(result$ut$tabs) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+infloss <- data.frame(`Information Loss` = result$il[1])
+kbl(infloss) %>%
+  kable_paper(full_width = F) 
+```
+
+Individual Distances for Information Loss:
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+temp <- attr(result$il, "indiv_distances")
+
+kbl(data.frame(as.list(temp))) %>%
+  kable_paper(full_width = F) 
+```
