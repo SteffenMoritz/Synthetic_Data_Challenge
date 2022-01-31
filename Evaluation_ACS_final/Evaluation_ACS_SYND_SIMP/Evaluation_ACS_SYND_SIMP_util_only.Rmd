@@ -1,0 +1,341 @@
+---
+title: ACS - Simulation Models
+subtitle: Evaluation Synthetic Data Creation 
+author: Steffen Moritz, Hariolf Merkle, Felix Geyer, Michel Reiffert, Reinhard Tent (DESTATIS)
+date: January 28, 2022
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc: true
+    toc_depth: 1
+# pdf_document:
+#    toc: true
+#    toc_depth: 1
+---
+
+
+
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+library("kableExtra")
+```
+
+```{r dataset, include=FALSE}
+# Load Source Dataset
+load(here::here("results/pums_syn_syndatcart.RData"))
+load(here::here("Evaluation_ACS_SYND_SIMP/results_acs_synd_2.RData"))
+load(here::here("acs.RData"))
+result <- results_acs_sat_mnorm_simple
+original <- as.data.frame(ACS)
+original$X <- NULL
+original$sim_individual_id <- NULL
+original$INCTOT <- NULL
+synthetic <- as.data.frame(pums_syn_syndatcart)
+```
+# Executive Summary
+
+According to our utility measures, simulated data using a multivariate normal distribution for (semi-)continuous variables and expanding it using FCS (CART) for the categorical variables is not a useful strategy to generate suitable synthetic data from the ACS dataset. The first impression of barely aligning marginal distributions is underpinned by further metrics. Only the Pearson correlation coefficients for binary and (semi-)continuous variables are close to those of the original dataset ("lower right corner"). The S_pMSE for tables and for distributions shows extreme values. Also the absolute difference in densities and the Bhattacharyya distance support the overall impression. Mlodak's information loss criterion indicates this synthetic dataset as not useful apart from testing technology.
+
+
+
+
+Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
+
+**Releasing to public: NO ** 
+
+**Testing analysis: NO **
+
+**Education: NO **
+
+**Testing technology: YES**
+
+
+
+# Dataset Considerations
+When deciding, if data is released to the public it is of utmost importance to define, **which variables** are the most relevant in terms of **privacy and utility**. This process is very **domain and country** specific, since different areas of the world have different privacy legislation and feature specific overall circumstances. This step would require input and discussions with actual domain experts. Since we are foreign to US privacy law, the assumptions made for the Synthetic Data Challenge are basically an **educated guess** from our side.
+From a utility perspective it is important to know which variables and correlations are **most interesting** for actual users of the created synthetic dataset. Different use cases might require focus on different variables and correlations. We could not single out a most important variable, thus in our utility analysis we decided to focus on the overall utility and not to prioritize a specific variable.
+We decided to remove the first column of the **ACS** dataset, since it only contains column numbers and hence does not need to be altered by any means.
+From a privacy perspective it has to be decided, which variables are **confidential** and which are **identifying**. As already mentioned, specifying this depends on multiple factors e.g. regulations or also other public information, that could be used for **de-anonymization**. For our analysis, we made the following assumptions: Of course any information about **income** has to be considered as **confidential**, otherwise publishing income statistics would be a way easier task for NSOs than it actually is. So `INCTOT`, `INCWAGE`, `INCWELFR`, `INCINVST`, `INCEARN` and `POVERTY` are treated as confidential variables. Additionally the times a person is not at home also is an information that encroaches in personal right and might be to the respondents detriment e.g. by burglars. The features HHWT and PERWT are weights that only present information about the way the dataset was created and hence are neither confidential nor identifying. All the other information (like Sex, Age, Race…) contain observable information and hence, in our opinion, are **identifying variables**.
+
+# Method Considerations
+We fit a multivariate normal distribution on the (semi-)continuous variables, e.g. income related variables, and expand the dataset using FCS (Cart) by further categorical variables. The fit of the multivariate normal distribution is crucial for the overall quality. One can assume a poor overall usability if the (few) starting variables do not mimic the original variables adequately. Some variables were censored at zero in cases where the respective draw delivered negative values if the original variable did not contain negative values. The variable for the total income was calculated by the sum of the other income components to assess consistency.
+
+
+# Privacy and Risk Evaluation
+### Disclosure Risk (R-Package: synthpop with own Improvements)
+Our starting point was the **matching of unique records**, as described in the disclosure risk measures chapter of the starter guide. The synthpop package provides us with an easy-to-use implementation of this method: `replicated.uniques`. However, one downside of just using `replicated.uniques` is that it does **not consider almost exact matches in numeric variables**. Imagine a data set with information about the respondents’ income. If there is a matching data point in the synthetic data set for a unique person in the original data set, that only differs by a slight margin, the original function would not identify this as a match. **Our solution** is to  borrow the notion of the **p% rule** from **cell suppression methods**, which identifies a data point as critical, if one can guess the original values with **some error of at most p%**. Thus, **our improved risk measure** is  able to evaluate disclosure risk in numeric data.
+Our Uniqueness-Measure for **“almost exact”** matches provides us with the following outputs:
+
+- **Replication Uniques**
+|   Number of unique records in the synthetic data set that replicates unique records in the original data set w.r.t. their quasi-identifying variables. In brackets, the proportion of replicated uniques in the synthetical data set relative to the original data set size is stated.
+
+- **Count Disclosure**
+|   Number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable, i.e. there is at least one confidential variable where the record in the synthetical data set is "too close" to the matching unique record in the original data set. We identify two records as "too close"  in a variable, if they differ in this variable by at most p%.
+
+- **Percentage Disclosure**
+|    Proportion of the number of replicated unique records in the synthetical data set that have a real disclosure risk in at least one confidential variable relating to the original data set size.
+For our selected best parametrized solution in this method-category, we got the following results:
+
+```{r privacy metrics, echo=FALSE, warning = FALSE, message= FALSE}
+library(synthpop)
+library(dplyr)
+
+generate_uniques_for_acs <-function(df_orig, df_synth, exclude = c("INCWAGE","INCWELFR", "INCINVST", "INCEARN", "POVERTY", "DEPARTS", "ARRIVES")){
+  syn_synth <- list(m = 1, syn = df_synth)
+  replicated.uniques(object = syn_synth, data = df_orig , exclude = exclude)
+}
+
+generate_uniques_pp_for_acs <-function(df_orig, df_synth,identifiers = 1:which(names(df_orig)=="WORKEDYR"),  p = 0.05){
+  syn_synth <- list(m = 1, syn = df_synth[,identifiers])
+  syn_orig <- list(m = 1, syn = df_orig[,identifiers])
+  
+  repl_synth <- replicated.uniques(object = syn_synth, data = df_orig[,identifiers])$replications
+  repl_orig <- replicated.uniques(object = syn_orig, data = df_synth[,identifiers])$replications
+  
+  
+  df <- inner_join(df_synth[repl_synth,], df_orig[repl_orig,], 
+                   by=names(df_orig)[identifiers], 
+                   suffix = c("_synth", "_orig"))
+  
+  count_disclosure <- df %>%
+    mutate( 
+           INCWAGE_diff = abs(INCWAGE_synth-INCWAGE_orig)/abs(INCWAGE_orig),
+           INCWELFR_diff = abs(INCWELFR_synth-INCWELFR_orig)/abs(INCWELFR_orig),
+           INCINVST_diff = abs(INCINVST_synth-INCINVST_orig)/abs(INCINVST_orig),
+           INCEARN_diff = abs(INCEARN_synth-INCEARN_orig)/abs(INCEARN_orig),
+           POVERTY_diff = abs(POVERTY_synth-POVERTY_orig)/abs(POVERTY_orig),
+           DEPARTS_diff = abs(DEPARTS_synth-DEPARTS_orig)/abs(DEPARTS_orig),
+           ARRIVES_diff = abs(ARRIVES_synth-ARRIVES_orig)/abs(ARRIVES_orig))%>%
+    filter(INCWAGE_diff < p | INCWELFR_diff < p | INCINVST_diff < p
+           | INCEARN_diff < p | POVERTY_diff < p | DEPARTS_diff < p |  ARRIVES_diff < p)%>%
+    count(.)
+  result = list(replications_uniques = sum(repl_synth),
+                count_disclosure = count_disclosure[1,1], per_disclosure = 100*count_disclosure[1,1]/nrow(df_synth))
+}
+
+
+# Disclosure Risk  - own metric
+disclosure_own <- generate_uniques_pp_for_acs(original, synthetic)
+
+dis_df <- data.frame(
+                 `Replication Uniques` = disclosure_own$replications_uniques, 
+                 `Number Replications` = disclosure_own$count_disclosure,  
+                 `Percentage Replications` = disclosure_own$per_disclosure
+                 )
+
+kbl(dis_df) %>%
+    kable_classic("striped", full_width = F)
+
+
+```
+
+
+## Perceived Disclosure Risk (R-Package: synthpop)
+
+Unique records in the synthetic dataset may be **mistaken for unique records**  based on the fact that
+**only the identifying variables match**. This can lead to problems, even if the associated confidential variables significantly differ from the original record. E.g. people might assume a certain income for a person, because they believe to have identified her from the identifying variables. Even if her real income **is not leaked** (as the confidential variables are different), this assumed (but wrong) information about him **might lead to disadvantages**. The **perceived risk** is measured by matching the unique records among the quasi-identifying variables (compare with non-confidential variables in Section "Dataset Considerations"). We applied the method `replicated.uniques` of the synthpop package. There is no fixed threshold that must not be exceeded in this measure, however, a smaller percentage of unique matches (referred to as Number Replications) is preferred to minimize the perceived disclosure risk.
+These are the results variables for perceived disclosure risk:
+
+- **Number Uniques**
+|   Number of unique individuals in the original data set.
+
+- **Number Replications**
+|   The number of matching records in the synthetic data set (based only on identifying variables). This is the number of individuals, which might perceived as disclosed (real disclosures would also count into this metric).
+
+- **Percentage Replications**
+|   The calculated percentage of duplicates in the synthetic data.
+For our selected best parametrized solution in this method-category, we got the following results:
+
+```{r, echo=FALSE, warning = FALSE, message= FALSE}
+
+# Perceived disclosure risk
+disclosure_percei <- generate_uniques_for_acs(original, synthetic )
+
+
+pp2 <- data.frame(`Metric` = c("Perceived Risk"), 
+                 `Number Uniques` = c(disclosure_percei$no.uniques), 
+                 `Number Replications` = c(disclosure_percei$no.replications),  
+                 `Percentage Replications` = c(disclosure_percei$per.replications)
+                 )
+
+kbl(pp2) %>%
+  kable_classic(full_width = F) 
+```
+
+
+# Utility Evaluation
+
+Different utility measures are applied in this section. These utility measures are the basis of utility evaluation for the generated synthetic dataset. The R packages synthpop, sdcMicro and corrplot were used to compute the following metrics. We do not use tests incorporating significance here. Confidence intervals in large surveys often tend to be extremely small so many slight differences appear to be significant. We do not consider the variable PUMA for our utility evaluation. During the ACS reports, some minor changes in availability regarding plots might occur. This is caused by the application of standardised scripts on different synthetic datasets.
+
+### Graphical Comparison for Margins (R-Package: synthpop)
+
+The following histograms provide an ad-hoc overview on the marginal distributions of the original and synthetic dataset. Matching or close distributions are related to a high data utility.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.show= TRUE, results = 'hide'}
+result$comp1$plots
+result$comp2$plots
+result$comp3$plots
+result$comp4$plots
+result$comp5$plots
+
+```
+
+
+
+
+
+### Correlation Plots for Graphical Comparison of Pearson Correlation 
+
+Synthetic Datasets should represent the dependencies of the original datasets. The following correlation plots provide an ad-hoc overview on the Pearson correlations of the original and synthetic dataset. The left plot shows the original correlation whereas the right plot provides the correlation based on the synthetic dataset.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library("corrplot")
+par(mfrow=c(1,2))
+corrplot(result[[6]], method = "color", type = "lower")
+corrplot(result[[7]], method = "color", type = "lower")
+```
+
+
+
+
+
+### Distributional Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Propensity scores are calculated on a combined dataset (original and synthetic). A model (here: CART) tries to identify the synthetic units in the dataset. Since both datasets should be identically structured, the pMSE should equal zero. The S_pMSE (standardised pMSE) should not exceed 10 and for a good fit below 3 according to Raab (2021, https://unece.org/sites/default/files/2021-12/SDC2021_Day2_Raab_AD.pdf)
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp1$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug1$pMSE, S_pMSE = result$ug1$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp2$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug2$pMSE, S_pMSE = result$ug2$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp3$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug3$pMSE, S_pMSE = result$ug3$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp4$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug4$pMSE, S_pMSE = result$ug4$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- result$comp5$tab.utility
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+ug1 <- data.frame(pMSE = result$ug5$pMSE, S_pMSE = result$ug5$S_pMSE)
+kbl(ug1) %>%
+  kable_paper(full_width = F) 
+```
+
+
+
+### Two-way Tables Comparison of Synthesised Data (R-Package: synthpop) by (S_)pMSE
+
+Two-way tables are evaluated based on the original and the synthetic dataset based on S_pMSE (see above). We also present the results for the mean absolute difference in densities (MabsDD) and the Bhattacharyya distance (dBhatt).
+
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut1_1$utility.plot
+result$ut1_2$utility.plot
+result$ut1_3$utility.plot
+result$ut1_4$utility.plot
+result$ut1_5$utility.plot
+
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut2_1$utility.plot
+result$ut2_2$utility.plot
+result$ut2_3$utility.plot
+result$ut2_4$utility.plot
+result$ut2_5$utility.plot
+
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+
+#result$ut$utility.plot
+
+result$ut3_1$utility.plot
+result$ut3_2$utility.plot
+result$ut3_3$utility.plot
+result$ut3_4$utility.plot
+result$ut3_5$utility.plot
+
+```
+
+
+
+
+### Information Loss Measure Proposed by Andrzej Mlodak (R-Package: sdcMicro)
+
+The value of this information loss criterion is between 0 (no information loss) and 1. It is calculated overall and for each variable.
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+
+infloss <- data.frame(`Information Loss` = result$il[1])
+kbl(infloss) %>%
+  kable_paper(full_width = F) 
+```
+
+Individual Distances for Information Loss:
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+attr(result$il, "indiv_distances")
+```
+
+
+
+# Tuning and Optimizations
+Addtionally to fitting multivariate normal distributions, we tested an approach with non-normal multivariate distributions. We were not able to fit a more flexibel multivariate distributions, supposedly caused among other characteristics by extreme skewness in some variables.
