@@ -33,23 +33,21 @@ original <- as.data.frame(satgpa)
 synthetic <- as.data.frame(sm_sat_minuteman)
 ```
 # Executive Summary
+We used minutemen from the python scripts.As you could expect from the second place submission of 2021 NIST differential privacy, minutemen scored good in our main privacy metrics. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) together with the Simulation it was the best method in terms of privacy. The utility measures Unfortunately, Minuteman method could not produce useful synthetic data based on SAT in our case. There is barely any measure that would indicate a high utility. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the S_pMSE for tables and for distributions do not indicate substantial quality. There is no reasonable utility according to Mlodak's information loss criterion.
 
 
-The Minuteman method could not produce useful synthetic data based on SAT in our case. There is barely any measure that would indicate a high utility. The Kolmologorov-Smirnov test, the mahalanobis distance based on the regression parameters as well as the S_pMSE for tables and for distributions do not indicate substantial quality. There is no reasonable utility according to Mlodak's information loss criterion.
+**USE CASE RECOMMENDATIONS**
 
+```{r , echo=FALSE, warning = FALSE, message= FALSE}
+use <- data.frame("Releasing_to_Public"  = "NO",
+                  "Testing_Analysis" = "NO",
+                  "Education" = "YES",
+                   "Testing_Technology" = "MAYBE")
+kbl(use) %>%
+    kable_classic("striped", full_width = T) #%>%  row_spec(0, bold = TRUE, italic = TRUE) %>% 
 
-
-
-Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
-
-**Releasing to public: NO ** 
-
-**Testing analysis: NO **
-
-**Education: NO **
-
-**Testing technology: YES, but too elaborated **
-
+```
+For our SAT experiment, would not recommend **releasing data to the public** that was created by minutemen. Since the sythetic dataset would not reproduce correlations and distributions in a sufficient way, this could lead to confusion. The same is true for **testing analysis**. We could imagine undergrad students playing around with the data to improve their data science skills. Thus, since the privacy risk is low, **education** might be a suitable use case. Also **testing technology** might be feasable, but probably there are faster and more uncomplicated options for this use case.
 
 
 # Dataset Considerations
@@ -62,8 +60,8 @@ From a **privacy perspective** it has to be decided, which variables are **confi
 
 
 # Method Considerations
+Minutemen was the second place submission in the third round of the 2021 NIST differential privacy temporal map challenge. The technique is based on **probabilistic graphical models** and according to their authors best for **categorical and discrete features**. We used the python scripts as descibed by the Synthetic Data challenge. We also used the **descretize** and **un-discretize** steps. 
 
-**GANs** are in comparison to the other methods a **relatively recent method** (Goodfellow, et al., 2014). For our experiments we used the `sdv` python libraries. We employed `ctgan` (Conditional GAN) and `CopulaGAN` for our analysis. We also tried using the R package `ganGenerativeData`, but because we were not able to use all variable types as input, the results with ganGenerativeData were not on the same level as with svd. For the **SAT** dataset computing time with GAN seemed reasonable. Yet, already for SAT as we were using ctgan with `epochs` settings of over 1000, the **process already took hours**. For **ACS** we had to cancel several runs, after not completing after 8 hours computing time. This clearly shows, that the GAN method has it's **limits** when dealing with **large and complex datasets**. Dedicated computing infrastructure would be quite useful in these cases. Data utility wise (especially for the lower epoch settings) the resulting synthetic dataset differed significantly from the original data. In comparison to the other methods the GAN seemed to create **implausible values** more often. E.g. negative values for variables, that are known to be only positive. While the tendency to slightly **extrapolate** might seem negative at first, this can also be a positive e.g. when the original dataset itself is only a sample or when the method is used to create technical test data.
 
 # Privacy and Risk Evaluation
 ### Disclosure Risk (R-Package: synthpop with own Improvements)
