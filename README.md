@@ -64,9 +64,9 @@ Since it was a challenge in limited time and we were working in parallel the Git
 - [All 3_ files: Mainly intermediate datasets created from using minutemen](/3_minuteman_acs) 
 - [All 4_ files: Saved cgan models](/4_models)
 - [All 5_ files: Different resulting synthetic datasets](5_results)
-- [All 6_ files: .Rmd files used to run python code for GANs](/)
-- [All 7_ files: Different .R files for running algorithms to create synthetic data](/)
-- [All other files: Mainly different other .R code files, original datasets, samples of original datasets ](/)
+- [All 6_ files: .Rmd files used to run python code for GANs](https://github.com/SteffenMoritz/Synthetic_Data_Challenge)
+- [All 7_ files: Different .R files for running algorithms to create synthetic data](https://github.com/SteffenMoritz/Synthetic_Data_Challenge)
+- [All other files: Mainly different other .R code files, original datasets, samples of original datasets ](https://github.com/SteffenMoritz/Synthetic_Data_Challenge)
 
 
 Some larger files >100MB of our repo are unfortunately not linked, because of the max. Github file size allowed in the free tier.
