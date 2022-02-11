@@ -1,6 +1,6 @@
 
 
-# TEAM DESTATIS: Repository for work on UNECE HLG-MOS Synthetic Data Challenge 
+# TEAM DESTATIS: Repository for work on the UNECE HLG-MOS Synthetic Data Challenge 
 
 This was our (**Team DESTATIS**) repository for work on the United Nations Economic Commission for Europe (UNECE) High-level Group for the Modernisation of Statistical Production and Services (HLG-MOS) **Synthetic Data Challenge 2022**. 
 
@@ -58,8 +58,19 @@ Our team of the Federal Statistical Office of Germany (Statistisches Bundesamt) 
 ## Repository Structure
 Since it was a challenge in limited time and we were working in parallel the Github repository might look a little bit untidy. There are plenty of interesting things to find in the repository, here is a quick orientation:
 
-- [Synthetic Data Starter Guide](0_Final_Slides_DESTATIS.pdf) 
-- [Synthetic Data Starter Guide](/2_Evaluation_ACS_FCS) 
+- [All 0_ files: Overview Presentation abour our challenge work](0_Final_Slides_DESTATIS.pdf) 
+- [All 1_ files: All our final synthetic datasets and multiple evaluation reports](/1_Final_Reports_and_Results) 
+- [All 2_ files: Different folders with .Rmd files to create the evalation reports for the synthetic datasets ](/2_Evaluation_ACS_FCS) 
+- [All 3_ files: Mainly intermediate datasets created from using minutemen](/23_minuteman_acs) 
+- [All 4_ files: Saved cgan models](/4_models)
+- [All 5_ files: Different resulting synthetic datasets](5_results)
+- [All 6_ files: .Rmd files used to run python code for GANs]()
+- [All 7_ files: Different .R files for running algorithms to create synthetic data]()
+- [All other files: Mainly different other .R code files, original datasets, samples of original datasets ]()
+
+
+
+
 
 
 Some larger files >100MB of our repo are unfortunately not linked, because of the max. Github file size allowed in the free tier.
