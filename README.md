@@ -61,16 +61,12 @@ Since it was a challenge in limited time and we were working in parallel the Git
 - [All 0_ files: Overview Presentation abour our challenge work](0_Final_Slides_DESTATIS.pdf) 
 - [All 1_ files: All our final synthetic datasets and multiple evaluation reports](/1_Final_Reports_and_Results) 
 - [All 2_ files: Different folders with .Rmd files to create the evalation reports for the synthetic datasets ](/2_Evaluation_ACS_FCS) 
-- [All 3_ files: Mainly intermediate datasets created from using minutemen](/23_minuteman_acs) 
+- [All 3_ files: Mainly intermediate datasets created from using minutemen](/3_minuteman_acs) 
 - [All 4_ files: Saved cgan models](/4_models)
 - [All 5_ files: Different resulting synthetic datasets](5_results)
-- [All 6_ files: .Rmd files used to run python code for GANs]()
-- [All 7_ files: Different .R files for running algorithms to create synthetic data]()
-- [All other files: Mainly different other .R code files, original datasets, samples of original datasets ]()
-
-
-
-
+- [All 6_ files: .Rmd files used to run python code for GANs](/)
+- [All 7_ files: Different .R files for running algorithms to create synthetic data](/)
+- [All other files: Mainly different other .R code files, original datasets, samples of original datasets ](/)
 
 
 Some larger files >100MB of our repo are unfortunately not linked, because of the max. Github file size allowed in the free tier.
