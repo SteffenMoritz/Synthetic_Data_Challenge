@@ -33,22 +33,28 @@ synthetic <- as.data.frame(ACS_synth_samp100000)
 result <- results_acs_FCS
 ```
 # Executive Summary
-
-We found **Fully Conditional Specification** (FCS) algorithm quite useful for 
-FCS is not only very useful for the generation of synthetic "SAT"-data, it is also very suitable to generate synthetic data from the ACS dataset. Basically all marginal distributions are aligning. With one extreme exception, the S_pMSE shows only values below 10. The Pearson correlation coefficients for binary and (semi-)continuous variables are also practically identical to those of the original dataset. Also the absolute difference in densities and the Bhattacharyya distance support the overall impression. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful. 100k sample
+We applied **Fully Conditional Specification** (FCS) on the **ACS** dataset via the **synthpop** package. Our final FCS model was with **CART**. FCS seemed to us like a very interesting option for certain use cases. Out of all different methods we tested (FCS, IPSO, GAN, Simulation, Minutemen) FCS produced the **best usability** results for **ACS**. Of course by providing good usability there is usually a **trade-off** with the privacy measures. Only **IPSO** was behind **FCS** in our main privacy metrics. However, overall the privacy measures were still acceptable for some use cases.
 
 
+We found **Fully Conditional Specification** (FCS) algorithm is not only very useful for the generation of synthetic "SAT"-data, it is also very suitable to generate synthetic data from the ACS dataset. Basically all marginal distributions are aligning. With one extreme exception, the S_pMSE shows only values below 10. The Pearson correlation coefficients for binary and (semi-)continuous variables are also practically identical to those of the original dataset. Also the absolute difference in densities and the Bhattacharyya distance support the overall impression. Only Mlodak's information loss criterion indicates this synthetic dataset as mediocre useful (based on 100k sample).
 
 
-Based on the results of this document, we rate the suitability of this synthetic dataset for the use cases as follows:
 
-**Releasing to public: YES ** 
 
-**Testing analysis: YES **
+**USE CASE RECOMMENDATIONS**
 
-**Education: YES **
+```{r , echo=FALSE, warning = FALSE, message= FALSE}
+use <- data.frame("Releasing_to_Public"  = "NO",
+                  "Testing_Analysis" = "YES",
+                  "Education" = "NO",
+                   "Testing_Technology" = "MAYBE")
+kbl(use) %>%
+    kable_classic("striped", full_width = T) #%>%  row_spec(0, bold = TRUE, italic = TRUE) %>% 
 
-**Testing technology: YES**
+```
+
+Since the usability results were clearly the best, FCS is interesting for every use case that requires high usability.  Because of the trade-off with privacy we probably would only supply the FCS synthetic data to trusted partners. So **Testing Analysis**, where trusted researchers can develop and test their models before clearance for the actual microdata seems like a very good fit. **Releasing to Public** and **Education** mostly wouldn't fit because of privacy issues. Internal **Technology Testing** could be a possible use case, but for most of these testing cases there are probably easier options requiring less computational power to provide synthetic data.
+
 
 
 

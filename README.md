@@ -1,9 +1,69 @@
-# Synthetic_Data_Challenge
+
+
+# TEAM DESTATIS: Repository for work on UNECE HLG-MOS Synthetic Data Challenge 
+
+This was our (**Team DESTATIS**) repository for work on the United Nations Economic Commission for Europe (UNECE) High-level Group for the Modernisation of Statistical Production and Services (HLG-MOS) **Synthetic Data Challenge 2022**. 
+
+<img src="img/1024px-United_Nations_Economic_and_Social_Commission_for_Europe_Logo.svg.png" align="center" width="150" height="60" alt="UNECE Logo" />
 
 
 
-## To-Do Liste
+## Background
 
- - Diskutieren, welche Vars bei SAT überhaupt geschützt werden müssen
- - Gibt es dazu Infos ... ?
- - welche Strukturen / Zusammenhänge sollten in SAT unbedingt erhalten werden
+The HLG-MOS Synthetical Data Challenge was all about exploring different methods, algorithms, metrics and utilities to create synthetic data. Synthetic Data could potentially be an interesting option for national statistical agencies to share data while maintaining public trust. 
+
+In order to be beneficial for certain use cases (e.g. 'release data to the public', 'release to trusted researchers', 'usage in education') the synthetic data needs to conserve certain statistical properties of the data. Thus, the synthetic data needs to be similar to the original data, but at the same time it has to be different to preserve privacy. 
+
+There is a lot of active reseach done on synthetic data and new methods for generating and evaluating confidentiality of synthetic data are emerging. The HLG-MOS has created a [Synthetic Data Starter Guide](https://statswiki.unece.org/download/attachments/330367757/Synthetic%20Data%20for%20NSOs%20A%20starter%20guide.pdf?api=v2) to give national statistic offices an intro into this topic. 
+
+
+# Goal 
+
+Goal of the challenge was to create synthetic versions of provided datasets and afterwards evaluate to what extent we would use this synthetic data for certain use cases. These use-cases were 'Releasing microdata to the public', 'Testing analysis', 'Education', 'Testing technology'.
+
+
+One objective thereby was to evaluate as many different methods as possibly, while still trying to optimze parameters for the methods as good as possible.
+
+Our team managed to create synthetic data with the following methods:
+
+ - Fully Conditional Specification (FCS)
+ - Generative Adversarial Network (GAN)
+ - Probabilistic Graphical Models(Minutemen DP-pgm)
+ - Information Preserving Statistical Obfuscation(IPSO)
+ - Multivariate non-normal distribution (Simulated)
+
+
+The other objective was to do this evaluation ideally for both of the provided original datasets. One dataset (SATGPA) being more of a toy example and the other (ACS) a more complex real-life dataset.
+
+  - [SATGPA](https://www.openintro.org/data/index.php?data=satgpa): SAT (United States Standardized university Admissions Test) and GPA (university Grade Point Average) data, 6 features, 1.000 observations. 
+  
+ - [ACS](https://github.com/usnistgov/SDNist/tree/main/sdnist/census_public_data): Demographic survey data (American Community Survey), 33 features, 1.035.201 observations. 
+
+So overall, it was about trying as many methods as possible, while still doing a quality evaluation (in terms of privacy and usability metrics) for each created synthetic dataset.
+
+Final deliverables were: A short 5 minute video, Synthetic Datasets, Evaluation Reports and an Evaluation of the Starter Guide.
+
+# Team
+Our team of the Federal Statistical Office of Germany (Statistisches Bundesamt) consited from five members of different groups within Destatis. Participating were:
+
+ - Steffen M.
+ - Reinhard T.
+ - Felix G.
+ - Michel R.
+ - Hariolf M.
+ 
+ <img src="img/Statistisches_Bundesamt.svg.png" align="center" width="150" height="60" alt="Destatis Logo" />
+
+
+## Repository Structure
+Since it was a challenge in limited time and we were working in parallel the Github repository might look a little bit untidy. There are plenty of interesting things to find in the repository, here is a quick orientation:
+
+- [Synthetic Data Starter Guide](0_Final_Slides_DESTATIS.pdf) 
+- [Synthetic Data Starter Guide](/2_Evaluation_ACS_FCS) 
+
+
+Some larger files >100MB of our repo are unfortunately not linked, because of the max. Github file size allowed in the free tier.
+
+## Results
+
+- what were our results.. ?
