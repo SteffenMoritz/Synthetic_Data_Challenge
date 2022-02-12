@@ -17,6 +17,7 @@ In order to be beneficial for certain use cases (e.g. 'release data to the publi
 There is a lot of active research done on synthetic data and new methods for generating and evaluating confidentiality of synthetic data are emerging. The HLG-MOS has created a [Synthetic Data Starter Guide](https://statswiki.unece.org/download/attachments/330367757/Synthetic%20Data%20for%20NSOs%20A%20starter%20guide.pdf?api=v2) to give national statistic offices an intro into this topic. 
 
 <img src="img/ex2.png" align="center" width="300" height="200" alt="Output Example" />
+
 *Example output: Correlation Plot showing differences in correlations between a GAN created synthetic dataset and the original data*
 
 
@@ -50,6 +51,7 @@ A short 5 minute summary **video**, synthetic **datasets**, evaluation **reports
 
 
 <img src="img/ex1.png" align="center" width="300" height="200" alt="Output Example" />
+
 *Example output: Histogram showing differences in distributions between a GAN created synthetic dataset and the original data*
 
 # Team
