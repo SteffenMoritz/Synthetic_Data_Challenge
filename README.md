@@ -90,34 +90,53 @@ We ended up on **2nd place** in the challenge leaderboard (which mostly expresse
 
 Here is also a quick overview about some resulting metrics for the different methods:
 
-<img src="img/res1.png" align="center" width="350" height="140"  alt="Output Example" />
+<img src="img/res1.png" align="center" width="350" height="140"  alt="Utility Metrics" />
 
 *Figure 3: Some of the utility metrics calculated for the created synthetic versions of the SATGAP dataset*
 
-<img src="img/res2.png" align="center" width="350" height="140" alt="Output Example" />
+<img src="img/res2.png" align="center" width="350" height="140" alt="Privacy Metrics" />
 
 *Figure 4: Some of the privacy metrics calculated for the created synthetic versions of the SATGAP dataset*
 
 
 But, one **key takeaway** from this challenge is: **One or two metrics are not able to tell the whole story**. Some datasets showed e.g.really good usability results according to the pMSE metric, but the usability according to histogram comparisons was terrible. That is why in order to evaluate each method / created synthetic datasets we had to compile quite large reports using several different metrics.
 
-These reports (together with the datasets itself) were the main results:
+These reports [SATGPA-FCS](1_Final_Reports_and_Results/1. Evaluation SATGPA - Fully Conditional Specification (FCS).pdf), [SATGPA-GAN](1_Final_Reports_and_Results/2. Evaluation SATGPA - Generative Adversarial Network (GAN).pdf), [SATGPA-PGM](1_Final_Reports_and_Results/3. Evaluation SATGPA - Probabilistic Graphical Models (Minutemen DP-pgm).pdf), [SATGPA-IPSO](1_Final_Reports_and_Results/4. Evaluation SATGPA - Information Preserving Statistical Obfuscation (IPSO).pdf), [SATGPA-SIM](1_Final_Reports_and_Results/5. Evaluation SATGPA - Simulated Data (multivariate non-normal distribution).pdf), [ACS-FCS](1_Final_Reports_and_Results/6. Evaluation ACS - Fully Conditional Specification (FCS).pdf), [ACS-GAN](1_Final_Reports_and_Results/7. Evaluation ACS - Generative Adversarial Network (GAN).pdf), [ACS-PGM](1_Final_Reports_and_Results/8. Evaluation ACS - Probabilistic Graphical Models (Minutemen DP-pgm).pdf), [ACS-IPSO](1_Final_Reports_and_Results/9. Evaluation ACS - Information Preserving Statistical Obfuscation (IPSO).pdf), [ACS-SIM](1_Final_Reports_and_Results/10. Evaluation ACS - Simulation Models (multivariate normal distribution).pdf) (together with the datasets itself) were the main results.
 
-[slides]("1_Final_Reports_and_Results/1. Evaluation SATGPA - Fully Conditional Specification (FCS)")
+To end this already quite lengthy Readme.md file - here is the **SATGPA-GAN report** as an report example:
 
-<img src="img/1.jpg" align="center" alt="Output Example" />
+<img src="img/1.jpg" align="center" alt="Executive Summary" />
+
 
 <img src="img/2.jpg" align="center" alt="Output Example" />
 
+
 <img src="img/3.jpg" align="center" alt="Output Example" />
+
 
 <img src="img/4.jpg" align="center" alt="Output Example" />
 
+
 <img src="img/5.jpg" align="center" alt="Output Example" />
+
 
 <img src="img/6.jpg" align="center" alt="Output Example" />
 
+
 <img src="img/7.jpg" align="center" alt="Output Example" />
+
+
+<img src="img/8.jpg" align="center" alt="Output Example" />
+
+
+<img src="img/9.jpg" align="center" alt="Output Example" />
+
+
+<img src="img/10.jpg" align="center" alt="Output Example" />
+
+
+<img src="img/11.jpg" align="center" alt="Output Example" />
+
 
 
 
