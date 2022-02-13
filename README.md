@@ -16,9 +16,9 @@ In order to be beneficial for certain use cases (e.g. 'release data to the publi
 
 There is a lot of active research done on synthetic data and new methods for generating and evaluating confidentiality of synthetic data are emerging. The HLG-MOS has created a [Synthetic Data Starter Guide](https://statswiki.unece.org/download/attachments/330367757/Synthetic%20Data%20for%20NSOs%20A%20starter%20guide.pdf?api=v2) to give national statistic offices an intro into this topic. 
 
-<img src="img/ex2.png" align="center" width="300" height="200" alt="Output Example" />
+<img src="img/ex2.png" align="center" width="300" height="200" alt="Output Example 1" />
 
-*Example output: Correlation Plot showing differences in correlations between a GAN created synthetic dataset and the original data*
+*Figure 1: Results example Correlation Plot showing differences in correlations between a GAN created synthetic dataset and the original data*
 
 
 # Goal 
@@ -50,9 +50,9 @@ So overall, it was about trying as many methods as possible, while still doing a
 A short 5 minute summary **video**, synthetic **datasets**, evaluation **reports** and an evaluation of the starter guide.
 
 
-<img src="img/ex1.png" align="center" width="300" height="200" alt="Output Example" />
+<img src="img/ex1.png" align="center" width="300" height="200" alt="Output Example 2" />
 
-*Example output: Histogram showing differences in distributions between a GAN created synthetic dataset and the original data*
+*Figure 2: Results example histogram showing differences in distributions between a GAN created synthetic dataset and the original data*
 
 # Team
 Our team of the Federal Statistical Office of Germany (Statistisches Bundesamt) consited from five members of different groups within Destatis. Participating were:
@@ -82,6 +82,41 @@ Since it was a challenge in limited time and we were working in parallel the Git
 
 Some larger files >100MB of our repo are unfortunately not linked, because of the max. Github file size allowed in the free tier.
 
+
+
 ## Results
 
+We ended up on **2nd place** in the challenge leaderboard (which mostly expressed, how many methods a team successfully used to create and evaluate synthetic datasets). It might be interesting to look at our final overview [slides](0_Final_Slides_DESTATIS.pdf). 
+
+Here is also a quick overview about some resulting metrics for the different methods:
+
+<img src="img/res1.png" align="center" width="350" height="140"  alt="Output Example" />
+*Figure 3: gdsd*
+
+<img src="img/res2.png" align="center" width="350" height="140" alt="Output Example" />
+*Figure 4: gdsd*
+
+
+But, one **key takeaway** from this challenge is: **One or two metrics are not able to tell the whole story**. Some datasets showed e.g.really good usability results according to the pMSE metric, but the usability according to histogram comparisons was terrible. That is why in order to evaluate each method / created synthetic datasets we had to compile quite large reports using several different metrics.
+
+These reports (together with the datasets itself) were the main results:
+
+[slides](1_Final_Reports_and_Results/1. Evaluation SATGPA - Fully Conditional Specification (FCS))
+
 <img src="img/1.jpg" align="center" alt="Output Example" />
+
+<img src="img/2.jpg" align="center" alt="Output Example" />
+
+<img src="img/3.jpg" align="center" alt="Output Example" />
+
+<img src="img/4.jpg" align="center" alt="Output Example" />
+
+<img src="img/5.jpg" align="center" alt="Output Example" />
+
+<img src="img/6.jpg" align="center" alt="Output Example" />
+
+<img src="img/7.jpg" align="center" alt="Output Example" />
+
+
+
+
