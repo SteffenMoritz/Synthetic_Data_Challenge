@@ -91,17 +91,19 @@ We ended up on **2nd place** in the challenge leaderboard (which mostly expresse
 Here is also a quick overview about some resulting metrics for the different methods:
 
 <img src="img/res1.png" align="center" width="350" height="140"  alt="Output Example" />
-*Figure 3: gdsd*
+
+*Figure 3: Some of the utility metrics calculated for the created synthetic versions of the SATGAP dataset*
 
 <img src="img/res2.png" align="center" width="350" height="140" alt="Output Example" />
-*Figure 4: gdsd*
+
+*Figure 4: Some of the privacy metrics calculated for the created synthetic versions of the SATGAP dataset*
 
 
 But, one **key takeaway** from this challenge is: **One or two metrics are not able to tell the whole story**. Some datasets showed e.g.really good usability results according to the pMSE metric, but the usability according to histogram comparisons was terrible. That is why in order to evaluate each method / created synthetic datasets we had to compile quite large reports using several different metrics.
 
 These reports (together with the datasets itself) were the main results:
 
-[slides](1_Final_Reports_and_Results/1. Evaluation SATGPA - Fully Conditional Specification (FCS))
+[slides]("1_Final_Reports_and_Results/1. Evaluation SATGPA - Fully Conditional Specification (FCS)")
 
 <img src="img/1.jpg" align="center" alt="Output Example" />
 
