@@ -10,9 +10,9 @@ This was our (**Team DESTATIS**) repository for work on the United Nations Econo
 
 ## Background
 
-The HLG-MOS Synthetical Data Challenge was all about exploring different methods, algorithms, metrics and utilities to create synthetic data. Synthetic Data could potentially be an interesting option for national statistical agencies to share data while maintaining public trust. 
+The HLG-MOS Synthetical Data Challenge was all about exploring different methods, algorithms, metrics and utilities to create **synthetic data**. Synthetic Data could potentially be an interesting option for national statistical agencies to share data while maintaining public trust. 
 
-In order to be beneficial for certain use cases (e.g. 'release data to the public', 'release to trusted researchers', 'usage in education') the synthetic data needs to conserve certain statistical properties of the data. Thus, the synthetic data needs to be similar to the original data, but at the same time it has to be different to preserve privacy. 
+In order to be beneficial for certain **use cases** (e.g. 'release data to the public', 'release to trusted researchers', 'usage in education') the synthetic data needs to conserve certain statistical properties of the data. Thus, the synthetic data needs to be **similar** to the original data, but at the same time it has to be different to **preserve privacy**. 
 
 There is a lot of active research done on synthetic data and new methods for generating and evaluating confidentiality of synthetic data are emerging. The HLG-MOS has created a [Synthetic Data Starter Guide](https://statswiki.unece.org/download/attachments/330367757/Synthetic%20Data%20for%20NSOs%20A%20starter%20guide.pdf?api=v2) to give national statistic offices an intro into this topic. 
 
@@ -23,10 +23,10 @@ There is a lot of active research done on synthetic data and new methods for gen
 
 # Goal 
 
-Goal of the challenge was to create synthetic versions of provided datasets and afterwards evaluate to what extent we would use this synthetic data for certain use cases. These use-cases were 'Releasing microdata to the public', 'Testing analysis', 'Education', 'Testing technology'.
+Goal of the challenge was to **create** synthetic versions of provided datasets and afterwards **evaluate** to what extent we would use this synthetic data for certain **use cases**. These use-cases were 'Releasing microdata to the public', 'Testing analysis', 'Education', 'Testing technology'.
 
 
-One objective thereby was to evaluate as many different methods as possibly, while still trying to optimze parameters for the methods as good as possible.
+One objective thereby was to evaluate **as many** different methods as possibly, while still trying to **optimize** parameters for the methods as good as possible.
 
 Our team managed to create synthetic data with the following methods:
 
@@ -37,7 +37,7 @@ Our team managed to create synthetic data with the following methods:
  - Multivariate non-normal distribution (Simulated)
 
 
-The other objective was to do this evaluation ideally for both of the provided original datasets. One dataset (SATGPA) being more of a toy example and the other (ACS) a more complex real-life dataset.
+The other objective was to do this evaluation ideally for **both** of the provided original datasets. One dataset (SATGPA) being more of a toy example and the other (ACS) a more complex real-life dataset.
 
   - [SATGPA](https://www.openintro.org/data/index.php?data=satgpa): SAT (United States Standardized university Admissions Test) and GPA (university Grade Point Average) data, 6 features, 1.000 observations. 
   
@@ -55,7 +55,7 @@ A short 5 minute summary **video**, synthetic **datasets**, evaluation **reports
 *Figure 2: Results example histogram showing differences in distributions between a GAN created synthetic dataset and the original data*
 
 # Team
-Our team of the Federal Statistical Office of Germany (Statistisches Bundesamt) consited from five members of different groups within Destatis. Participating were:
+Our team of the **Federal Statistical Office of Germany** (Statistisches Bundesamt) consited from five members of different groups within Destatis. Participating were:
 
  - Steffen M.
  - Reinhard T.
